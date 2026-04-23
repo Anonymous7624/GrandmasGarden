@@ -5,6 +5,15 @@
 (function () {
   const STORAGE_KEY = "grandmas-garden-cart-v1";
 
+  /** Canonical listing photos for cart thumbnails (matches shop + detail pages). */
+  const PRODUCT_CART_IMAGE = {
+    "raw-honey": "./Listing photos/RawHoney.jpg",
+    "cinnamon-honey": "./Listing photos/CinnamonHoney.jpg",
+    "elderberry": "./Listing photos/Elderberry-large.jpg",
+    "little-jar-sunshine": "./Listing photos/LittleJarOfSunshine.jpg",
+    "raw-hot-honey": "./Listing photos/HotHoney.jpg",
+  };
+
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
@@ -14,17 +23,27 @@
     return "$" + Number(n).toFixed(0);
   }
 
+  function normalizeCartImages() {
+    cart.forEach((line) => {
+      if (!line || !line.productId) return;
+      const src = PRODUCT_CART_IMAGE[line.productId];
+      if (src) line.image = src;
+    });
+  }
+
   function loadCart() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       cart = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(cart)) cart = [];
+      normalizeCartImages();
     } catch {
       cart = [];
     }
   }
 
   function saveCart() {
+    normalizeCartImages();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
     updateBadge();
     renderCart();
@@ -41,7 +60,9 @@
   function updateOverlayScrollLock() {
     const cartOpen = $("#cartDrawer") && !$("#cartDrawer").classList.contains("translate-x-full");
     const checkoutOpen = $("#checkoutModal") && !$("#checkoutModal").classList.contains("hidden");
-    if (cartOpen || checkoutOpen) {
+    const lb = document.getElementById("ggPhotoLightbox");
+    const lightboxOpen = lb && !lb.classList.contains("hidden");
+    if (cartOpen || checkoutOpen || lightboxOpen) {
       document.documentElement.setAttribute("data-panel-open", "true");
     } else {
       document.documentElement.removeAttribute("data-panel-open");
@@ -170,7 +191,7 @@
       cart.push({ ...line, qty: addQty });
     }
     saveCart();
-    showToast("Added to your cart — thank you, dear!");
+    showToast("Added to your cart, thank you, dear!");
   }
 
   function init(options) {
@@ -220,12 +241,17 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") {
-        closeCart();
-        $("#checkoutModal")?.classList.add("hidden");
-        $("#checkoutModal")?.classList.remove("flex");
+      if (e.key !== "Escape") return;
+      const lb = document.getElementById("ggPhotoLightbox");
+      if (lb && !lb.classList.contains("hidden")) {
+        window.GrandmasGardenProductLightbox?.close?.();
         updateOverlayScrollLock();
+        return;
       }
+      closeCart();
+      $("#checkoutModal")?.classList.add("hidden");
+      $("#checkoutModal")?.classList.remove("flex");
+      updateOverlayScrollLock();
     });
 
     $$(".mobile-nav").forEach((a) => {
@@ -245,6 +271,7 @@
     openCart,
     closeCart,
     showToast,
+    updateOverlayScrollLock,
     cartLineKey(productId, sizeId) {
       return productId + "|" + (sizeId || "");
     },

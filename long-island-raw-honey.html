@@ -42,22 +42,6 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
-    .detail-zoom-viewport {
-      overflow: hidden;
-      border-radius: 0.75rem;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: none;
-    }
-    .detail-zoom-img {
-      transform: scale(1);
-      transform-origin: 50% 50%;
-      will-change: transform;
-      transition: transform 0.22s ease-out;
-    }
-    .detail-zoom-viewport.is-zooming .detail-zoom-img {
-      transform: scale(2.25);
-      transition-duration: 0.06s;
-    }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
@@ -96,7 +80,7 @@
         <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/></svg>
       </div>
       <p class="font-display text-xl text-pine">Your basket is resting in the shade</p>
-      <p class="text-sm text-pine/75">Add something sweet from the shop — Grandma’s saving a jar for you.</p>
+      <p class="text-sm text-pine/75">Add something sweet from the shop, Grandma’s saving a jar for you.</p>
       <button type="button" id="continueShopping" class="rounded-2xl bg-garden px-6 py-3 text-sm font-semibold text-cream shadow-md transition hover:brightness-110">
         Continue Shopping
       </button>
@@ -118,7 +102,7 @@
   <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
       <a href="index.html" class="group flex shrink-0 items-center rounded-2xl px-1 py-0.5 transition hover:opacity-90" aria-label="Grandma’s Garden home">
-        <img src="./Listing photos/Logo (1).png" alt="Grandma's Garden" width="120" height="160" class="h-20 w-auto shrink-0 object-contain" decoding="async" />
+        <img src="./Listing photos/logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-20 w-auto shrink-0 object-contain" decoding="async" />
       </a>
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
         <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
@@ -155,9 +139,11 @@
         <div>
           <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/60 shadow-inner ring-1 ring-garden/10">
             <div id="pSlides" class="flex transition-transform duration-500 ease-out will-change-transform">
-              <div class="min-w-full shrink-0 p-1 sm:p-1.5">
-                <div class="detail-zoom-viewport relative h-[min(460px,80vmin)] w-full overflow-hidden rounded-xl bg-cream ring-1 ring-garden/15">
-                  <img src="./Listing photos/RawHoney.jpg" alt="Long Island Raw Honey jar" class="detail-zoom-img absolute inset-0 h-full w-full object-cover object-center select-none" width="800" height="800" draggable="false" decoding="async" />
+              <div class="min-w-full shrink-0">
+                <div id="detailHeroOpen" class="cursor-zoom-in rounded-2xl p-1 sm:p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-garden" role="button" tabindex="0" aria-label="View larger photos">
+                  <div class="relative h-[min(460px,80vmin)] w-full overflow-hidden rounded-xl bg-cream ring-1 ring-garden/15">
+                    <img src="./Listing photos/RawHoney.jpg" alt="Long Island Raw Honey jar" class="pointer-events-none h-full w-full object-cover object-center select-none" width="800" height="800" draggable="false" decoding="async" />
+                  </div>
                 </div>
               </div>
               <div class="min-w-full shrink-0 p-1 sm:p-1.5">
@@ -181,7 +167,7 @@
           <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">Long Island Raw Honey</h1>
           <p class="mt-3 font-display text-3xl text-terracotta">$9</p>
           <p class="mt-6 text-base leading-relaxed text-pine/90 sm:text-lg">
-            Indulge in our 8oz container of pure Long Island raw honey, crafted with love from Grandma’s Garden. This is the best fresh raw honey, harvested straight from local hives on Long Island, NY. Golden, floral, and unforgettable. Ingredients: Long Island raw honey and love.
+            This is our eight ounce jar of pure Long Island raw honey, straight from local hives and poured with love from my kitchen. It is golden, floral, and tastes like sunshine in a spoon. Everything is grown without harsh chemicals. Most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives. Ingredients are raw honey, patience, and a whole lot of love.
           </p>
           <div class="mt-8 flex items-center justify-between gap-4 rounded-2xl bg-white p-4 ring-1 ring-garden/15">
             <span class="text-sm font-semibold text-garden">Quantity</span>
@@ -200,15 +186,25 @@
   </main>
 
   <footer class="border-t border-garden/15 bg-pine text-cream">
-    <div class="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
-      <p class="text-sm text-cream/90">© <span id="year"></span> Grandma’s Garden. All rights reserved.</p>
-      <p class="text-sm font-medium text-gold/90">Made with love on Long Island</p>
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-10 sm:px-6">
+      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-cream shadow-sm ring-1 ring-white/15 transition hover:bg-white/20">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877F2] text-white" aria-hidden="true">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </span>
+        Follow us on Facebook
+      </a>
+      <div class="flex w-full flex-col items-center gap-2 border-t border-white/10 pt-6 text-center sm:flex-row sm:justify-between sm:text-left">
+        <p class="text-sm text-cream/90">© <span id="year"></span> Grandma’s Garden. All rights reserved.</p>
+        <p class="text-sm font-medium text-gold/90">Made with love on Long Island</p>
+      </div>
     </div>
   </footer>
 
   <script src="cart.js"></script>
+  <script src="product-lightbox.js"></script>
   <script>
     GrandmasGardenCart.init({ shopHref: "shop.html" });
+    GrandmasGardenProductLightbox.init({ mainSrc: "./Listing photos/RawHoney.jpg" });
 
     (function () {
       const slides = document.getElementById("pSlides");
@@ -276,63 +272,6 @@
           image: MAIN_IMG,
         });
       });
-
-      function wireGrandmasGardenDetailZoom(container) {
-        var root = container || document;
-        root.querySelectorAll(".detail-zoom-viewport").forEach(function (vp) {
-          var img = vp.querySelector(".detail-zoom-img");
-          if (!img || img.dataset.ggDetailZoom) return;
-          img.dataset.ggDetailZoom = "1";
-          function originFromClient(cx, cy) {
-            var r = vp.getBoundingClientRect();
-            if (r.width < 1 || r.height < 1) return;
-            var x = ((cx - r.left) / r.width) * 100;
-            var y = ((cy - r.top) / r.height) * 100;
-            img.style.transformOrigin =
-              Math.max(0, Math.min(100, x)) + "% " + Math.max(0, Math.min(100, y)) + "%";
-          }
-          function endZoom() {
-            vp.classList.remove("is-zooming");
-            img.style.transformOrigin = "50% 50%";
-          }
-          vp.addEventListener("mouseenter", function (e) {
-            originFromClient(e.clientX, e.clientY);
-            vp.classList.add("is-zooming");
-          });
-          vp.addEventListener("mousemove", function (e) {
-            if (vp.classList.contains("is-zooming")) originFromClient(e.clientX, e.clientY);
-          });
-          vp.addEventListener("mouseleave", endZoom);
-          vp.addEventListener(
-            "touchstart",
-            function (e) {
-              if (!e.touches[0]) return;
-              originFromClient(e.touches[0].clientX, e.touches[0].clientY);
-              vp.classList.add("is-zooming");
-              e.stopPropagation();
-            },
-            { passive: true }
-          );
-          vp.addEventListener(
-            "touchmove",
-            function (e) {
-              if (!e.touches[0] || !vp.classList.contains("is-zooming")) return;
-              originFromClient(e.touches[0].clientX, e.touches[0].clientY);
-              e.stopPropagation();
-            },
-            { passive: true }
-          );
-          vp.addEventListener("touchend", function (e) {
-            endZoom();
-            e.stopPropagation();
-          });
-          vp.addEventListener("touchcancel", function (e) {
-            endZoom();
-            e.stopPropagation();
-          });
-        });
-      }
-      wireGrandmasGardenDetailZoom();
     })();
   </script>
 </body>

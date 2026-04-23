@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Cinnamon Honey — Grandma’s Garden</title>
+  <title>Raw Hot Honey — Grandma’s Garden</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -140,12 +140,9 @@
           <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/60 shadow-inner ring-1 ring-garden/10">
             <div id="pSlides" class="flex transition-transform duration-500 ease-out will-change-transform">
               <div class="min-w-full shrink-0">
-                <div class="relative p-1 sm:p-1.5">
-                  <span class="pointer-events-none absolute left-4 top-4 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</span>
-                  <div id="detailHeroOpen" class="cursor-zoom-in rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-garden" role="button" tabindex="0" aria-label="View larger photos">
-                    <div class="relative h-[min(460px,80vmin)] w-full overflow-hidden rounded-xl bg-cream ring-1 ring-garden/15">
-                      <img src="./Listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey bottle" class="pointer-events-none h-full w-full object-cover object-center select-none" width="800" height="800" draggable="false" decoding="async" />
-                    </div>
+                <div id="detailHeroOpen" class="cursor-zoom-in rounded-2xl p-1 sm:p-1.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-garden" role="button" tabindex="0" aria-label="View larger photos">
+                  <div class="relative h-[min(460px,80vmin)] w-full overflow-hidden rounded-xl bg-cream ring-1 ring-garden/15">
+                    <img src="./Listing photos/HotHoney.jpg" alt="Raw Hot Honey" class="pointer-events-none h-full w-full object-cover object-center select-none" width="800" height="800" draggable="false" decoding="async" />
                   </div>
                 </div>
               </div>
@@ -167,10 +164,10 @@
         </div>
 
         <div>
-          <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">Cinnamon Honey</h1>
+          <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">Raw Hot Honey</h1>
           <p class="mt-3 font-display text-3xl text-terracotta">$9</p>
           <p class="mt-6 text-base leading-relaxed text-pine/90 sm:text-lg">
-            This eight ounce bottle of cinnamon honey is my sweet little hug for your morning toast, fruit, yogurt, oatmeal, or anything that needs a gentle sparkle. It is cozy, comforting, and a favorite around here. Everything is grown without harsh chemicals. Most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives. Ingredients are raw honey, Ceylon cinnamon, and love.
+            Our Raw Hot Honey is the perfect sweet and spicy mix. I make it with raw honey and homegrown chilies plus a touch of apple cider vinegar, so it brings a delicious kick to chicken, pizza, roasted vegetables, cheese boards, marinades, or even your favorite cocktails. Everything is grown without harsh chemicals. Most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives. Ingredients are raw honey, homegrown chillis, apple cider vinegar, and love.
           </p>
           <div class="mt-8 flex items-center justify-between gap-4 rounded-2xl bg-white p-4 ring-1 ring-garden/15">
             <span class="text-sm font-semibold text-garden">Quantity</span>
@@ -207,7 +204,7 @@
   <script src="product-lightbox.js"></script>
   <script>
     GrandmasGardenCart.init({ shopHref: "shop.html" });
-    GrandmasGardenProductLightbox.init({ mainSrc: "./Listing photos/CinnamonHoney.jpg" });
+    GrandmasGardenProductLightbox.init({ mainSrc: "./Listing photos/HotHoney.jpg" });
 
     (function () {
       const slides = document.getElementById("pSlides");
@@ -262,13 +259,13 @@
         qtyEl.textContent = String(qty);
       });
 
-      const MAIN_IMG = "./Listing photos/CinnamonHoney.jpg";
+      const MAIN_IMG = "./Listing photos/HotHoney.jpg";
 
       document.getElementById("addBtn").addEventListener("click", () => {
         GrandmasGardenCart.addOrMergeLine({
-          key: GrandmasGardenCart.cartLineKey("cinnamon-honey", null),
-          productId: "cinnamon-honey",
-          title: "Cinnamon Honey",
+          key: GrandmasGardenCart.cartLineKey("raw-hot-honey", null),
+          productId: "raw-hot-honey",
+          title: "Raw Hot Honey",
           sizeLabel: null,
           unitPrice: 9,
           qty,
