@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Grandma’s Garden — Long Island</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F9F1E3',
+            gold: '#D4AF77',
+            garden: '#4A7043',
+            pine: '#166534',
+            terracotta: '#C46A4E',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            script: ['"Great Vibes"', 'cursive'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+          },
+          backgroundImage: {
+            'leaf-tile': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath fill='%234A7043' fill-opacity='0.06' d='M40 4c-6 10-4 22 2 30 8-4 14-12 18-22-8 2-16 2-20-8zm0 72c6-10 4-22-2-30-8 4-14 12-18 22 8-2 16-2 20 8zM4 40c10-6 22-4 30 2-4 8-12 14-22 18 2-8 2-16-8-20zm72 0c-10 6-22 4-30-2 4-8 12-14 22-18-2 8-2 16 8 20z'/%3E%3C/svg%3E\")",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html[data-panel-open="true"],
+    html[data-panel-open="true"] body {
+      overflow: hidden;
+    }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: rgba(74, 112, 67, 0.35);
+      border-radius: 999px;
+    }
+  </style>
+</head>
+<body class="bg-cream font-sans text-pine antialiased">
+  <!-- SVG defs for patterns -->
+  <svg aria-hidden="true" class="absolute h-0 w-0 overflow-hidden" focusable="false">
+    <defs>
+      <pattern id="softPetals" width="96" height="96" patternUnits="userSpaceOnUse">
+        <circle cx="12" cy="20" r="3" fill="#D4AF77" fill-opacity="0.12" />
+        <circle cx="48" cy="8" r="2.5" fill="#C46A4E" fill-opacity="0.1" />
+        <circle cx="72" cy="44" r="2" fill="#166534" fill-opacity="0.08" />
+        <path d="M30 70 Q40 58 50 70 Q40 82 30 70" fill="#D4AF77" fill-opacity="0.1" />
+      </pattern>
+    </defs>
+  </svg>
+
+  <!-- Toast -->
+  <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-500 ease-out" role="status" aria-live="polite">
+    <div class="pointer-events-auto rounded-2xl border border-garden/20 bg-white px-5 py-3 text-sm font-medium text-pine shadow-xl shadow-garden/10">
+      <span id="toastText">Added to cart</span>
+    </div>
+  </div>
+
+  <!-- Product modal -->
+  <div id="productModal" class="fixed inset-0 z-[70] hidden items-end justify-center sm:items-center" aria-hidden="true">
+    <div id="productModalBackdrop" class="absolute inset-0 bg-pine/40 backdrop-blur-sm transition-opacity"></div>
+    <div id="productModalPanel" class="relative z-10 flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden rounded-t-3xl bg-cream shadow-2xl transition-all duration-300 sm:rounded-3xl sm:max-h-[90vh] translate-y-8 opacity-0 sm:translate-y-0">
+      <button type="button" id="productModalClose" class="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/90 text-pine shadow-md ring-1 ring-garden/15 transition hover:bg-white hover:scale-105" aria-label="Close">
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+      <div class="grid max-h-[92vh] grid-cols-1 gap-0 overflow-y-auto sm:max-h-[90vh] sm:grid-cols-2">
+        <div class="relative bg-gradient-to-b from-garden/10 to-cream p-4 sm:p-6">
+          <div id="modalGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/60 shadow-inner ring-1 ring-garden/10">
+            <div id="modalSlides" class="flex transition-transform duration-500 ease-out will-change-transform"></div>
+            <button type="button" id="modalPrev" class="absolute left-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/95 p-2 text-pine shadow-md ring-1 ring-garden/10 transition hover:bg-gold/30" aria-label="Previous image">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" id="modalNext" class="absolute right-2 top-1/2 z-10 -translate-y-1/2 rounded-full bg-white/95 p-2 text-pine shadow-md ring-1 ring-garden/10 transition hover:bg-gold/30" aria-label="Next image">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+            <div id="modalDots" class="absolute bottom-3 left-0 right-0 flex justify-center gap-2"></div>
+          </div>
+          <p class="mt-2 text-center text-xs text-garden/70">Swipe or use arrows to browse</p>
+        </div>
+        <div class="flex flex-col gap-4 border-t border-garden/10 p-5 sm:border-t-0 sm:border-l sm:p-6">
+          <div>
+            <p id="modalBadge" class="mb-2 hidden inline-block rounded-full bg-gold/35 px-3 py-1 text-xs font-bold uppercase tracking-wide text-pine ring-1 ring-gold/50"></p>
+            <h2 id="modalTitle" class="font-display text-3xl font-bold text-pine sm:text-4xl"></h2>
+            <p id="modalPriceLine" class="mt-2 font-display text-2xl text-terracotta"></p>
+          </div>
+          <div id="modalSizeWrap" class="hidden">
+            <p class="mb-2 text-sm font-semibold text-garden">Size</p>
+            <div id="modalSizeControl" class="inline-flex rounded-xl bg-white p-1 shadow-inner ring-1 ring-garden/15" role="group" aria-label="Choose size"></div>
+          </div>
+          <p id="modalDescription" class="text-sm leading-relaxed text-pine/90"></p>
+          <div class="mt-auto flex flex-col gap-4 border-t border-garden/10 pt-4">
+            <div class="flex items-center justify-between gap-4">
+              <span class="text-sm font-semibold text-garden">Quantity</span>
+              <div class="flex items-center rounded-xl bg-white p-1 shadow-sm ring-1 ring-garden/15">
+                <button type="button" id="qtyMinus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-cream">−</button>
+                <span id="qtyValue" class="min-w-[2rem] text-center font-semibold text-pine">1</span>
+                <button type="button" id="qtyPlus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-cream">+</button>
+              </div>
+            </div>
+            <button type="button" id="modalAddToCart" class="w-full rounded-2xl bg-gradient-to-r from-garden to-pine py-3.5 text-center text-base font-semibold text-cream shadow-lg shadow-garden/25 transition hover:brightness-110 active:scale-[0.99]">
+              Add to Cart
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Checkout notice -->
+  <div id="checkoutModal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4" aria-hidden="true">
+    <div id="checkoutBackdrop" class="absolute inset-0 bg-pine/50 backdrop-blur-sm"></div>
+    <div class="relative z-10 max-w-md rounded-3xl bg-cream p-8 text-center shadow-2xl ring-1 ring-garden/15">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-gold/30 text-2xl">🌼</div>
+      <h3 class="font-display text-2xl font-bold text-pine">Thank you!</h3>
+      <p class="mt-3 text-sm leading-relaxed text-pine/85">
+        Our full checkout with Stripe is coming very soon. For now, please reach out to us directly to place your order. We can’t wait to share Grandma’s Garden with you!
+      </p>
+      <button type="button" id="checkoutClose" class="mt-6 w-full rounded-2xl bg-terracotta py-3 font-semibold text-white shadow-md transition hover:brightness-105">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <!-- Cart drawer -->
+  <div id="cartBackdrop" class="fixed inset-0 z-[60] hidden bg-pine/30 backdrop-blur-[2px] transition-opacity opacity-0"></div>
+  <aside id="cartDrawer" class="fixed inset-y-0 right-0 z-[65] flex w-full max-w-md translate-x-full flex-col bg-cream shadow-2xl transition-transform duration-300 ease-out" aria-label="Shopping cart">
+    <div class="flex items-center justify-between border-b border-garden/15 px-5 py-4">
+      <h2 class="font-display text-2xl font-bold text-pine">Your Cart</h2>
+      <button type="button" id="cartClose" class="rounded-full p-2 text-pine transition hover:bg-white" aria-label="Close cart">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="cartEmpty" class="hidden flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
+      <span class="text-5xl">🧺</span>
+      <p class="font-display text-xl text-pine">Your basket is resting in the shade</p>
+      <p class="text-sm text-pine/75">Add something sweet from the shop — Grandma’s saving a jar for you.</p>
+      <button type="button" id="continueShopping" class="rounded-2xl bg-garden px-6 py-3 text-sm font-semibold text-cream shadow-md transition hover:brightness-110">
+        Continue Shopping
+      </button>
+    </div>
+    <div id="cartListWrap" class="flex flex-1 flex-col overflow-hidden">
+      <div id="cartList" class="scrollbar-thin flex-1 overflow-y-auto px-4 py-3"></div>
+      <div class="border-t border-garden/15 bg-cream/95 p-5 backdrop-blur">
+        <div class="mb-4 flex items-center justify-between text-pine">
+          <span class="font-semibold">Subtotal</span>
+          <span id="cartSubtotal" class="font-display text-2xl text-terracotta">$0</span>
+        </div>
+        <button type="button" id="checkoutBtn" class="w-full rounded-2xl bg-gradient-to-r from-terracotta to-gold py-3.5 text-center text-base font-semibold text-white shadow-lg transition hover:brightness-105">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
+      <a href="#home" id="brandLink" class="group flex shrink-0 flex-col items-center justify-center rounded-2xl px-2 py-1 text-center transition hover:opacity-90" data-nav="home">
+        <span class="text-2xl leading-none sm:text-3xl" aria-hidden="true">🌼</span>
+        <span class="font-script text-xl leading-tight text-gold transition group-hover:text-terracotta sm:text-2xl">Grandma’s</span>
+        <span class="font-script text-xl leading-tight text-gold transition group-hover:text-terracotta sm:text-2xl">Garden</span>
+      </a>
+
+      <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
+        <a href="#home" class="nav-link text-sm font-semibold text-pine/80 transition hover:text-garden" data-nav="home">Home</a>
+        <a href="#shop" class="nav-link text-sm font-semibold text-pine/80 transition hover:text-garden" data-nav="shop">Shop</a>
+      </nav>
+
+      <div class="ml-auto flex items-center gap-2 md:ml-0">
+        <button type="button" id="menuBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-pine ring-1 ring-garden/15 transition hover:bg-white md:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+          <svg id="menuIconOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="menuIconClose" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button type="button" id="cartBtn" class="relative inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white text-pine shadow-sm ring-1 ring-garden/15 transition hover:ring-garden/40" aria-label="Open cart">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/></svg>
+          <span id="cartBadge" class="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-bold text-white opacity-0 transition-opacity">0</span>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-garden/10 bg-cream px-4 py-4 md:hidden">
+      <div class="flex flex-col gap-3">
+        <a href="#home" class="mobile-nav rounded-xl px-4 py-3 text-base font-semibold text-pine transition hover:bg-white" data-nav="home">Home</a>
+        <a href="#shop" class="mobile-nav rounded-xl px-4 py-3 text-base font-semibold text-pine transition hover:bg-white" data-nav="shop">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section id="home" class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden scroll-mt-20">
+      <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-cream via-[#fff9ed] to-gold/25"></div>
+      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-80"></div>
+      <div class="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-garden/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute -left-16 bottom-10 h-64 w-64 rounded-full bg-terracotta/10 blur-3xl"></div>
+      <div class="pointer-events-none absolute inset-0" style="background-image: url(#softPetals)"></div>
+
+      <div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 pb-28 pt-16 text-center sm:pb-32 sm:pt-20">
+        <p class="mb-4 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-garden shadow-sm ring-1 ring-garden/10">
+          Long Island · Small batch
+        </p>
+        <h1 class="font-display text-4xl font-bold leading-tight text-pine sm:text-5xl md:text-6xl">
+          Welcome to <span class="text-garden">Grandma’s Garden</span>
+        </h1>
+        <p class="mt-5 max-w-xl text-lg text-pine/85 sm:text-xl">
+          Fresh from the heart of Long Island, made with love
+        </p>
+        <div class="mt-10 flex flex-col items-center gap-4 sm:flex-row">
+          <button type="button" id="heroShopBtn" class="rounded-2xl bg-gradient-to-r from-garden to-pine px-10 py-4 text-base font-semibold text-cream shadow-xl shadow-garden/30 transition hover:brightness-110 hover:shadow-2xl active:scale-[0.98]">
+            Shop Now
+          </button>
+          <a href="#shop" class="rounded-2xl border-2 border-garden/30 bg-white/60 px-8 py-3.5 text-sm font-semibold text-garden backdrop-blur transition hover:border-garden hover:bg-white" data-nav="shop">
+            Browse the shop
+          </a>
+        </div>
+      </div>
+
+      <button type="button" id="scrollHint" class="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-pine/60 transition hover:text-garden" aria-label="Scroll to learn more">
+        <span class="text-xs font-medium uppercase tracking-widest">Explore</span>
+        <span class="flex h-10 w-6 items-start justify-center rounded-full border-2 border-current pt-1.5">
+          <span class="h-2 w-1 animate-bounce rounded-full bg-current"></span>
+        </span>
+      </button>
+    </section>
+
+    <!-- Shop -->
+    <section id="shop" class="relative scroll-mt-24 border-t border-garden/10 bg-gradient-to-b from-cream to-white py-16 sm:py-24">
+      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-40"></div>
+      <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+        <div class="mb-12 text-center">
+          <h2 class="font-display text-4xl font-bold text-pine sm:text-5xl">From our garden</h2>
+          <p class="mx-auto mt-3 max-w-2xl text-pine/80">Handcrafted goodies straight from Long Island — each jar filled with sunshine and care.</p>
+        </div>
+
+        <div id="productGrid" class="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-garden/15 bg-pine text-cream">
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
+      <p class="text-sm text-cream/90">© <span id="year"></span> Grandma’s Garden. All rights reserved.</p>
+      <p class="text-sm font-medium text-gold/90">Made with love on Long Island</p>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      const PLACEHOLDER_SVG =
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e8e4dc' width='800' height='800'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-size='28' fill='%234A7043'%3EMore Photos Coming Soon%3C/text%3E%3C/svg%3E";
+
+      const PRODUCTS = [
+        {
+          id: "raw-honey",
+          title: "Long Island Raw Honey",
+          price: 9,
+          badge: null,
+          teaser: "Pure 8oz raw honey from our Long Island hives — golden, floral, unforgettable.",
+          image: "./listing photos/RawHoney.jpg",
+          description:
+            "Indulge in our 8oz container of pure Long Island raw honey, crafted with love from Grandma’s Garden. This is the best fresh raw honey on Long Island, NY, harvested straight from our local hives. Ingredients: Long Island raw honey and love.",
+        },
+        {
+          id: "cinnamon-honey",
+          title: "Cinnamon Honey",
+          price: 9,
+          badge: "Best Seller!",
+          teaser: "Sweetness meets gentle spice — lovely on toast, fruit, yogurt, and oatmeal.",
+          image: "./listing photos/CinnamonHoney.jpg",
+          description:
+            "Our 8oz bottle of Cinnamon Honey is the perfect blend of sweetness and spice. It’s wonderful on toast, fresh fruit, yogurt, oatmeal, and so much more. A true customer favorite! Ingredients: Raw Honey, Ceylon Cinnamon and Love.",
+        },
+        {
+          id: "elderberry",
+          title: "Elderberry Syrup",
+          badge: null,
+          teaser: "A comforting family favorite for wellness through the seasons.",
+          description:
+            "Discover the powerful benefits of our Elderberry Syrup, a time-honored natural remedy lovingly crafted in Grandma’s Garden. Elderberry is celebrated for its ability to boost the immune system and help the body fight off colds, flu, and other upper respiratory infections. Packed with antioxidants, vitamins, and anti-inflammatory compounds, it can reduce the duration and severity of sickness symptoms, soothe sore throats, ease congestion, and support overall wellness — especially during cold and flu season. Perfect for the whole family! Ingredients: Spring Water, Organic Elderberries, Raw honey, Ceylon Cinnamon, Organic Ginger, Star Anise, Cloves.",
+          sizes: [
+            { id: "small", label: "Small", price: 15, image: null },
+            { id: "large", label: "Large", price: 30, image: "./listing photos/Elderberry-large.jpg" },
+          ],
+        },
+      ];
+
+      const STORAGE_KEY = "grandmas-garden-cart-v1";
+      let cart = [];
+      let activeProduct = null;
+      let activeSizeId = null;
+      let modalSlideIndex = 0;
+      let modalQty = 1;
+      let touchStartX = null;
+
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+      function updateOverlayScrollLock() {
+        const modalOpen = !$("#productModal").classList.contains("hidden");
+        const cartOpen = !$("#cartDrawer").classList.contains("translate-x-full");
+        const checkoutOpen = !$("#checkoutModal").classList.contains("hidden");
+        if (modalOpen || cartOpen || checkoutOpen) {
+          document.documentElement.setAttribute("data-panel-open", "true");
+        } else {
+          document.documentElement.removeAttribute("data-panel-open");
+        }
+      }
+
+      function money(n) {
+        return "$" + n.toFixed(0);
+      }
+
+      function elderberryImageFor(sizeId) {
+        const s = PRODUCTS.find((p) => p.id === "elderberry").sizes.find((x) => x.id === sizeId);
+        return s.image || PLACEHOLDER_SVG;
+      }
+
+      function getUnitPrice(product, sizeId) {
+        if (product.sizes) {
+          const s = product.sizes.find((x) => x.id === sizeId);
+          return s ? s.price : product.sizes[0].price;
+        }
+        return product.price;
+      }
+
+      function getMainImage(product, sizeId) {
+        if (product.sizes) return elderberryImageFor(sizeId);
+        return product.image;
+      }
+
+      function cartLineKey(productId, sizeId) {
+        return productId + "|" + (sizeId || "");
+      }
+
+      function loadCart() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          cart = raw ? JSON.parse(raw) : [];
+          if (!Array.isArray(cart)) cart = [];
+        } catch {
+          cart = [];
+        }
+      }
+
+      function saveCart() {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+        updateBadge();
+        renderCart();
+      }
+
+      function updateBadge() {
+        const n = cart.reduce((a, l) => a + l.qty, 0);
+        const badge = $("#cartBadge");
+        badge.textContent = String(n);
+        badge.classList.toggle("opacity-0", n === 0);
+      }
+
+      function showToast(msg) {
+        const t = $("#toast");
+        $("#toastText").textContent = msg;
+        t.classList.remove("translate-y-24", "opacity-0");
+        clearTimeout(showToast._tid);
+        showToast._tid = setTimeout(() => {
+          t.classList.add("translate-y-24", "opacity-0");
+        }, 2600);
+      }
+
+      function openCart() {
+        $("#cartBackdrop").classList.remove("hidden");
+        requestAnimationFrame(() => {
+          $("#cartBackdrop").classList.remove("opacity-0");
+          $("#cartDrawer").classList.remove("translate-x-full");
+          updateOverlayScrollLock();
+        });
+      }
+
+      function closeCart() {
+        $("#cartDrawer").classList.add("translate-x-full");
+        $("#cartBackdrop").classList.add("opacity-0");
+        setTimeout(() => {
+          $("#cartBackdrop").classList.add("hidden");
+          updateOverlayScrollLock();
+        }, 300);
+        updateOverlayScrollLock();
+      }
+
+      function renderCart() {
+        const empty = $("#cartEmpty");
+        const listWrap = $("#cartListWrap");
+        const list = $("#cartList");
+        if (cart.length === 0) {
+          empty.classList.remove("hidden");
+          listWrap.classList.add("hidden");
+          return;
+        }
+        empty.classList.add("hidden");
+        listWrap.classList.remove("hidden");
+        let sub = 0;
+        list.innerHTML = cart
+          .map((line, idx) => {
+            const unit = line.unitPrice;
+            sub += unit * line.qty;
+            const sizePart = line.sizeLabel ? `<span class="text-xs text-pine/60">${line.sizeLabel}</span>` : "";
+            const img = line.image;
+            return `
+            <div class="mb-4 rounded-2xl bg-white p-4 shadow-sm ring-1 ring-garden/10" data-idx="${idx}">
+              <div class="flex gap-3">
+                <div class="h-20 w-20 shrink-0 overflow-hidden rounded-xl bg-cream ring-1 ring-garden/10">
+                  <img src="${img}" alt="" class="h-full w-full ${img.startsWith("data:") ? "object-contain" : "object-cover"}" />
+                </div>
+                <div class="min-w-0 flex-1">
+                  <div class="flex items-start justify-between gap-2">
+                    <div>
+                      <p class="font-semibold text-pine">${line.title}</p>
+                      ${sizePart}
+                    </div>
+                    <button type="button" class="cart-remove text-terracotta transition hover:opacity-80" data-idx="${idx}" aria-label="Remove item">
+                      <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                    </button>
+                  </div>
+                  <div class="mt-3 flex items-center justify-between">
+                    <div class="flex items-center rounded-lg bg-cream p-0.5 ring-1 ring-garden/10">
+                      <button type="button" class="cart-qty h-8 w-8 rounded-md text-sm font-bold text-pine transition hover:bg-white" data-delta="-1" data-idx="${idx}">−</button>
+                      <span class="min-w-[1.5rem] text-center text-sm font-semibold">${line.qty}</span>
+                      <button type="button" class="cart-qty h-8 w-8 rounded-md text-sm font-bold text-pine transition hover:bg-white" data-delta="1" data-idx="${idx}">+</button>
+                    </div>
+                    <p class="font-display text-lg text-terracotta">${money(unit * line.qty)}</p>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          })
+          .join("");
+        $("#cartSubtotal").textContent = money(sub);
+
+        list.querySelectorAll(".cart-remove").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const i = +btn.getAttribute("data-idx");
+            cart.splice(i, 1);
+            saveCart();
+          });
+        });
+        list.querySelectorAll(".cart-qty").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const i = +btn.getAttribute("data-idx");
+            const d = +btn.getAttribute("data-delta");
+            const line = cart[i];
+            line.qty = Math.min(9, Math.max(1, line.qty + d));
+            saveCart();
+          });
+        });
+      }
+
+      function addToCartFromModal() {
+        if (!activeProduct) return;
+        const p = activeProduct;
+        const sizeId = p.sizes ? activeSizeId : null;
+        const size = p.sizes ? p.sizes.find((x) => x.id === sizeId) : null;
+        const unitPrice = getUnitPrice(p, sizeId);
+        const image = getMainImage(p, sizeId);
+        const key = cartLineKey(p.id, sizeId);
+        const existing = cart.find((l) => l.key === key);
+        const addQty = modalQty;
+        if (existing) {
+          existing.qty = Math.min(9, existing.qty + addQty);
+        } else {
+          cart.push({
+            key,
+            productId: p.id,
+            title: p.title,
+            sizeLabel: size ? size.label : null,
+            unitPrice,
+            qty: addQty,
+            image,
+          });
+        }
+        saveCart();
+        showToast("Added to your cart — thank you, dear!");
+        closeProductModal();
+      }
+
+      function buildModalSlides(mainSrc) {
+        const slides = $("#modalSlides");
+        slides.innerHTML = "";
+        const slideA = document.createElement("div");
+        slideA.className = "min-w-full shrink-0";
+        slideA.innerHTML =
+          mainSrc.startsWith("data:") || mainSrc.includes("PLACEHOLDER")
+            ? `<div class="flex aspect-square items-center justify-center bg-[#e8e4dc]"><img src="${mainSrc}" class="h-full w-full object-contain" alt="" /></div>`
+            : `<img src="${mainSrc}" class="aspect-square w-full object-cover" alt="" />`;
+        const slideB = document.createElement("div");
+        slideB.className = "min-w-full shrink-0";
+        slideB.innerHTML = `<div class="flex aspect-square items-center justify-center bg-[#e8e4dc] p-6 text-center"><img src="${PLACEHOLDER_SVG}" class="h-full w-full object-contain" alt="More photos coming soon" /></div>`;
+        slides.appendChild(slideA);
+        slides.appendChild(slideB);
+
+        const dots = $("#modalDots");
+        dots.innerHTML = "";
+        [0, 1].forEach((i) => {
+          const d = document.createElement("button");
+          d.type = "button";
+          d.className =
+            "h-2.5 w-2.5 rounded-full transition " + (i === 0 ? "bg-garden w-6" : "bg-garden/30");
+          d.setAttribute("aria-label", "Slide " + (i + 1));
+          d.addEventListener("click", () => setModalSlide(i));
+          dots.appendChild(d);
+        });
+        setModalSlide(0);
+      }
+
+      function setModalSlide(i) {
+        modalSlideIndex = Math.max(0, Math.min(1, i));
+        const slides = $("#modalSlides");
+        slides.style.transform = "translateX(-" + modalSlideIndex * 100 + "%)";
+        $$("#modalDots button").forEach((b, idx) => {
+          b.classList.toggle("bg-garden", idx === modalSlideIndex);
+          b.classList.toggle("w-6", idx === modalSlideIndex);
+          b.classList.toggle("bg-garden/30", idx !== modalSlideIndex);
+          b.classList.toggle("w-2.5", idx !== modalSlideIndex);
+        });
+      }
+
+      function syncModalSizeButtons() {
+        const p = activeProduct;
+        if (!p || !p.sizes) return;
+        $("#modalSizeControl").querySelectorAll("button").forEach((btn) => {
+          const sid = btn.getAttribute("data-size-id");
+          const on = sid === activeSizeId;
+          btn.className =
+            "rounded-lg px-3 py-2 text-sm font-semibold transition sm:px-4 " +
+            (on ? "bg-garden text-cream shadow" : "text-pine hover:bg-cream");
+        });
+      }
+
+      function openProductModal(productId, preferredSizeId) {
+        const p = PRODUCTS.find((x) => x.id === productId);
+        if (!p) return;
+        activeProduct = p;
+        if (p.sizes) {
+          const valid = p.sizes.some((s) => s.id === preferredSizeId);
+          activeSizeId = valid ? preferredSizeId : "large";
+        } else {
+          activeSizeId = null;
+        }
+        modalQty = 1;
+        $("#modalTitle").textContent = p.title;
+        const badge = $("#modalBadge");
+        if (p.badge) {
+          badge.textContent = p.badge;
+          badge.classList.remove("hidden");
+        } else {
+          badge.classList.add("hidden");
+        }
+        $("#modalDescription").textContent = p.description;
+        const sizeWrap = $("#modalSizeWrap");
+        const sizeCtrl = $("#modalSizeControl");
+        if (p.sizes) {
+          sizeWrap.classList.remove("hidden");
+          sizeCtrl.innerHTML = "";
+          p.sizes.forEach((s) => {
+            const b = document.createElement("button");
+            b.type = "button";
+            b.setAttribute("data-size-id", s.id);
+            b.textContent = s.label + " · " + money(s.price);
+            b.className =
+              "rounded-lg px-3 py-2 text-sm font-semibold transition sm:px-4 " +
+              (s.id === activeSizeId ? "bg-garden text-cream shadow" : "text-pine hover:bg-cream");
+            b.addEventListener("click", () => {
+              activeSizeId = s.id;
+              syncModalSizeButtons();
+              $("#modalPriceLine").textContent = money(getUnitPrice(p, activeSizeId));
+              buildModalSlides(getMainImage(p, activeSizeId));
+            });
+            sizeCtrl.appendChild(b);
+          });
+        } else {
+          sizeWrap.classList.add("hidden");
+        }
+        $("#modalPriceLine").textContent = money(getUnitPrice(p, activeSizeId));
+        buildModalSlides(getMainImage(p, activeSizeId));
+        $("#qtyValue").textContent = String(modalQty);
+
+        const modal = $("#productModal");
+        const panel = $("#productModalPanel");
+        modal.classList.remove("hidden");
+        modal.classList.add("flex");
+        modal.setAttribute("aria-hidden", "false");
+        requestAnimationFrame(() => {
+          panel.classList.remove("translate-y-8", "opacity-0");
+        });
+        updateOverlayScrollLock();
+      }
+
+      function closeProductModal() {
+        const panel = $("#productModalPanel");
+        panel.classList.add("translate-y-8", "opacity-0");
+        setTimeout(() => {
+          const modal = $("#productModal");
+          modal.classList.add("hidden");
+          modal.classList.remove("flex");
+          modal.setAttribute("aria-hidden", "true");
+          updateOverlayScrollLock();
+        }, 280);
+        updateOverlayScrollLock();
+      }
+
+      function renderProductCards() {
+        const grid = $("#productGrid");
+        grid.innerHTML = PRODUCTS.map((p) => {
+          const isElder = !!p.sizes;
+          const defaultSize = isElder ? "large" : null;
+          const img = isElder ? getMainImage(p, defaultSize) : p.image;
+          const priceHtml = isElder
+            ? `<p class="mt-2 font-display text-2xl text-terracotta"><span data-price-label>${money(getUnitPrice(p, "large"))}</span></p>`
+            : `<p class="mt-2 font-display text-2xl text-terracotta">${money(p.price)}</p>`;
+          const badgeHtml = p.badge
+            ? `<div class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">${p.badge}</div>`
+            : "";
+          const sizeBlock = isElder
+            ? `<div class="mt-4" data-card-sizes="${p.id}">
+                <p class="mb-2 text-xs font-bold uppercase tracking-wider text-garden/80">Choose size</p>
+                <div class="inline-flex w-full rounded-xl bg-cream p-1 ring-1 ring-garden/15">
+                  <button type="button" data-size="small" class="card-size flex-1 rounded-lg py-2 text-sm font-semibold text-pine transition hover:bg-white">Small · $15</button>
+                  <button type="button" data-size="large" class="card-size flex-1 rounded-lg py-2 text-sm font-semibold text-cream bg-garden shadow transition">Large · $30</button>
+                </div>
+              </div>`
+            : "";
+          return `
+          <article class="product-card group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-1 hover:shadow-2xl" data-id="${p.id}">
+            ${badgeHtml}
+            <button type="button" class="card-open block text-left" data-open="${p.id}">
+              <div class="relative aspect-[4/3] overflow-hidden bg-cream">
+                <img src="${img}" alt="${p.title}" class="card-img h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+                <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-pine/20 to-transparent opacity-0 transition group-hover:opacity-100"></div>
+              </div>
+            </button>
+            <div class="flex flex-1 flex-col p-5 sm:p-6">
+              <button type="button" class="card-open text-left" data-open="${p.id}">
+                <h3 class="font-display text-2xl font-bold text-pine">${p.title}</h3>
+                ${priceHtml}
+                <p class="mt-3 text-sm leading-relaxed text-pine/80">${p.teaser}</p>
+              </button>
+              ${sizeBlock}
+              <button type="button" class="card-details btn-view mt-5 w-full rounded-2xl border-2 border-garden/25 bg-white py-3 text-sm font-semibold text-garden transition hover:border-garden hover:bg-cream" data-open="${p.id}">
+                View Details
+              </button>
+            </div>
+          </article>`;
+        }).join("");
+
+        grid.querySelectorAll(".product-card").forEach((card) => {
+          const id = card.getAttribute("data-id");
+          const p = PRODUCTS.find((x) => x.id === id);
+          if (!p || !p.sizes) return;
+          const imgEl = card.querySelector(".card-img");
+          const priceLabel = card.querySelector("[data-price-label]");
+          const setCardSize = (sid) => {
+            const src = getMainImage(p, sid);
+            imgEl.src = src;
+            imgEl.classList.toggle("object-contain", src.startsWith("data:"));
+            imgEl.classList.toggle("object-cover", !src.startsWith("data:"));
+            priceLabel.textContent = money(getUnitPrice(p, sid));
+            card.querySelectorAll(".card-size").forEach((btn) => {
+              const on = btn.getAttribute("data-size") === sid;
+              btn.className =
+                "card-size flex-1 rounded-lg py-2 text-sm font-semibold transition " +
+                (on ? "bg-garden text-cream shadow" : "text-pine hover:bg-white");
+            });
+          };
+          card.querySelectorAll(".card-size").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+              e.stopPropagation();
+              setCardSize(btn.getAttribute("data-size"));
+            });
+          });
+        });
+
+        grid.querySelectorAll("[data-open]").forEach((btn) => {
+          btn.addEventListener("click", () => {
+            const id = btn.getAttribute("data-open");
+            const card = btn.closest(".product-card");
+            let preferred = null;
+            if (card) {
+              const activeBtn = card.querySelector(".card-size.bg-garden");
+              if (activeBtn) preferred = activeBtn.getAttribute("data-size");
+            }
+            openProductModal(id, preferred);
+          });
+        });
+      }
+
+      function scrollToSection(id) {
+        const el = document.getElementById(id);
+        if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+
+      function setMobileMenu(open) {
+        const mm = $("#mobileMenu");
+        const btn = $("#menuBtn");
+        mm.classList.toggle("hidden", !open);
+        btn.setAttribute("aria-expanded", open ? "true" : "false");
+        $("#menuIconOpen").classList.toggle("hidden", open);
+        $("#menuIconClose").classList.toggle("hidden", !open);
+      }
+
+      $("#year").textContent = new Date().getFullYear();
+      loadCart();
+      updateBadge();
+      renderCart();
+      renderProductCards();
+
+      $("#heroShopBtn").addEventListener("click", () => scrollToSection("shop"));
+      $("#scrollHint").addEventListener("click", () => scrollToSection("shop"));
+
+      $$(".nav-link, .mobile-nav, #brandLink, a[data-nav]").forEach((a) => {
+        a.addEventListener("click", (e) => {
+          const nav = a.getAttribute("data-nav");
+          if (nav === "shop" || a.getAttribute("href") === "#shop") {
+            e.preventDefault();
+            scrollToSection("shop");
+            setMobileMenu(false);
+          } else if (nav === "home" || a.getAttribute("href") === "#home") {
+            e.preventDefault();
+            scrollToSection("home");
+            setMobileMenu(false);
+          }
+        });
+      });
+
+      $("#menuBtn").addEventListener("click", () => {
+        const open = $("#mobileMenu").classList.contains("hidden");
+        setMobileMenu(open);
+      });
+
+      $("#cartBtn").addEventListener("click", () => openCart());
+      $("#cartClose").addEventListener("click", () => closeCart());
+      $("#cartBackdrop").addEventListener("click", () => closeCart());
+      $("#continueShopping").addEventListener("click", () => {
+        closeCart();
+        scrollToSection("shop");
+      });
+
+      $("#checkoutBtn").addEventListener("click", () => {
+        $("#checkoutModal").classList.remove("hidden");
+        $("#checkoutModal").classList.add("flex");
+        updateOverlayScrollLock();
+      });
+      $("#checkoutClose").addEventListener("click", () => {
+        $("#checkoutModal").classList.add("hidden");
+        $("#checkoutModal").classList.remove("flex");
+        updateOverlayScrollLock();
+      });
+      $("#checkoutBackdrop").addEventListener("click", () => {
+        $("#checkoutModal").classList.add("hidden");
+        $("#checkoutModal").classList.remove("flex");
+        updateOverlayScrollLock();
+      });
+
+      $("#productModalClose").addEventListener("click", closeProductModal);
+      $("#productModalBackdrop").addEventListener("click", closeProductModal);
+
+      $("#modalPrev").addEventListener("click", () => setModalSlide(0));
+      $("#modalNext").addEventListener("click", () => setModalSlide(1));
+
+      const gallery = $("#modalGallery");
+      gallery.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true }
+      );
+      gallery.addEventListener(
+        "touchend",
+        (e) => {
+          if (touchStartX == null) return;
+          const dx = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(dx) > 40) setModalSlide(dx < 0 ? 1 : 0);
+          touchStartX = null;
+        },
+        { passive: true }
+      );
+
+      $("#qtyMinus").addEventListener("click", () => {
+        modalQty = Math.max(1, modalQty - 1);
+        $("#qtyValue").textContent = String(modalQty);
+      });
+      $("#qtyPlus").addEventListener("click", () => {
+        modalQty = Math.min(9, modalQty + 1);
+        $("#qtyValue").textContent = String(modalQty);
+      });
+      $("#modalAddToCart").addEventListener("click", addToCartFromModal);
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") {
+          closeProductModal();
+          closeCart();
+          $("#checkoutModal").classList.add("hidden");
+          $("#checkoutModal").classList.remove("flex");
+          updateOverlayScrollLock();
+        }
+      });
+    })();
+  </script>
+</body>
+</html>
