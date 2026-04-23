@@ -42,9 +42,17 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
-    .zoom-wrap { overflow: hidden; border-radius: 1rem; }
-    .zoom-wrap img { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
-    .zoom-wrap:hover img { transform: scale(1.1); }
+    .zoom-wrap {
+      overflow: hidden;
+      border-radius: 1rem;
+    }
+    .zoom-wrap img {
+      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+      transform-origin: center center;
+    }
+    .zoom-wrap:hover img {
+      transform: scale(1.1);
+    }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
@@ -104,9 +112,8 @@
 
   <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
-      <a href="index.html" class="group flex shrink-0 items-center gap-3 rounded-2xl px-2 py-1 transition hover:opacity-90" aria-label="Grandma’s Garden home">
-        <div class="flex h-14 w-11 shrink-0 items-center justify-center rounded-xl border border-garden/20 bg-white/70 ring-1 ring-garden/10" aria-hidden="true"></div>
-        <span class="font-display text-lg font-semibold leading-tight text-pine sm:text-xl">Grandma’s Garden</span>
+      <a href="index.html" class="group flex shrink-0 items-center rounded-2xl px-1 py-0.5 transition hover:opacity-90" aria-label="Grandma’s Garden home">
+        <img src="./listing photos/logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-16 w-auto shrink-0 object-contain sm:h-20" decoding="async" />
       </a>
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
         <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
@@ -146,13 +153,13 @@
               <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
                 <div class="relative">
                   <span class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</span>
-                  <div class="zoom-wrap mx-auto max-h-[min(420px,78vw)] w-full max-w-lg bg-cream/50">
-                    <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey bottle" class="mx-auto h-full max-h-[min(420px,78vw)] w-full object-contain" />
+                  <div class="zoom-wrap mx-auto flex h-[min(440px,82vmin)] w-full max-w-lg items-center justify-center bg-cream/50 ring-1 ring-garden/10">
+                    <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey bottle" class="max-h-full w-full object-contain object-center" />
                   </div>
                 </div>
               </div>
               <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
-                <div class="mx-auto flex aspect-square max-h-[min(420px,78vw)] w-full max-w-lg items-center justify-center rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">
+                <div class="mx-auto flex h-[min(440px,82vmin)] w-full max-w-lg items-center justify-center rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">
                   <p class="text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>
                 </div>
               </div>

@@ -42,8 +42,14 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
-    .card-img-zoom { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
-    .group:hover .card-img-zoom { transform: scale(1.08); }
+    .product-zoom-img {
+      will-change: transform, transform-origin;
+      transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+    }
+    .product-zoom-viewport.is-zooming .product-zoom-img {
+      transform: scale(2.35);
+      transition-duration: 0.12s;
+    }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
@@ -103,9 +109,8 @@
 
   <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
-      <a href="index.html" class="group flex shrink-0 items-center gap-3 rounded-2xl px-2 py-1 transition hover:opacity-90" aria-label="Grandma’s Garden home">
-        <div class="flex h-14 w-11 shrink-0 items-center justify-center rounded-xl border border-garden/20 bg-white/70 ring-1 ring-garden/10" aria-hidden="true"></div>
-        <span class="font-display text-lg font-semibold leading-tight text-pine sm:text-xl">Grandma’s Garden</span>
+      <a href="index.html" class="group flex shrink-0 items-center rounded-2xl px-1 py-0.5 transition hover:opacity-90" aria-label="Grandma’s Garden home">
+        <img src="./listing photos/logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-16 w-auto shrink-0 object-contain sm:h-20" decoding="async" />
       </a>
 
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
@@ -143,8 +148,8 @@
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
         <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
           <a href="long-island-raw-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
-              <img src="./listing photos/RawHoney.jpg" alt="Long Island Raw Honey" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            <div class="product-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./listing photos/RawHoney.jpg" alt="Long Island Raw Honey" class="product-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Long Island Raw Honey</h2>
@@ -162,8 +167,8 @@
         <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
           <div class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</div>
           <a href="cinnamon-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
-              <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            <div class="product-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey" class="product-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Cinnamon Honey</h2>
@@ -180,8 +185,8 @@
 
         <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
           <a href="elderberry-syrup.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
-              <img src="./listing photos/Elderberry-large.jpg" alt="Elderberry Syrup" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            <div class="product-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./listing photos/Elderberry-large.jpg" alt="Elderberry Syrup" class="product-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Elderberry Syrup</h2>
@@ -209,6 +214,29 @@
   <script src="cart.js"></script>
   <script>
     GrandmasGardenCart.init({ shopHref: "shop.html" });
+
+    (function () {
+      document.querySelectorAll(".product-zoom-viewport").forEach(function (vp) {
+        var img = vp.querySelector(".product-zoom-img");
+        if (!img) return;
+        function setOrigin(e) {
+          var r = vp.getBoundingClientRect();
+          if (r.width < 1 || r.height < 1) return;
+          var x = ((e.clientX - r.left) / r.width) * 100;
+          var y = ((e.clientY - r.top) / r.height) * 100;
+          img.style.transformOrigin = Math.max(0, Math.min(100, x)) + "% " + Math.max(0, Math.min(100, y)) + "%";
+        }
+        vp.addEventListener("mouseenter", function (e) {
+          setOrigin(e);
+          vp.classList.add("is-zooming");
+        });
+        vp.addEventListener("mousemove", setOrigin);
+        vp.addEventListener("mouseleave", function () {
+          vp.classList.remove("is-zooming");
+          img.style.transformOrigin = "50% 50%";
+        });
+      });
+    })();
   </script>
 </body>
 </html>
