@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elderberry Syrup — Grandma’s Garden</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            cream: '#F9F1E3',
+            gold: '#D4AF77',
+            garden: '#4A7043',
+            pine: '#166534',
+            terracotta: '#C46A4E',
+          },
+          fontFamily: {
+            display: ['"Cormorant Garamond"', 'Georgia', 'serif'],
+            script: ['"Great Vibes"', 'cursive'],
+            sans: ['"Source Sans 3"', 'system-ui', 'sans-serif'],
+          },
+          backgroundImage: {
+            'leaf-tile': "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80' viewBox='0 0 80 80'%3E%3Cpath fill='%234A7043' fill-opacity='0.06' d='M40 4c-6 10-4 22 2 30 8-4 14-12 18-22-8 2-16 2-20-8zm0 72c6-10 4-22-2-30-8 4-14 12-18 22 8-2 16-2 20 8zM4 40c10-6 22-4 30 2-4 8-12 14-22 18 2-8 2-16-8-20zm72 0c-10 6-22 4-30-2 4-8 12-14 22-18-2 8-2 16 8 20z'/%3E%3C/svg%3E\")",
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    html[data-panel-open="true"],
+    html[data-panel-open="true"] body {
+      overflow: hidden;
+    }
+    .scrollbar-thin::-webkit-scrollbar { width: 6px; }
+    .scrollbar-thin::-webkit-scrollbar-thumb {
+      background: rgba(74, 112, 67, 0.35);
+      border-radius: 999px;
+    }
+    .zoom-wrap { overflow: hidden; border-radius: 1rem; }
+    .zoom-wrap img { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+    .zoom-wrap:hover img { transform: scale(1.1); }
+    .ph-zoom { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+    .ph-wrap:hover .ph-zoom { transform: scale(1.04); }
+  </style>
+</head>
+<body class="bg-cream font-sans text-pine antialiased">
+  <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-500 ease-out" role="status" aria-live="polite">
+    <div class="pointer-events-auto rounded-2xl border border-garden/20 bg-white px-5 py-3 text-sm font-medium text-pine shadow-xl shadow-garden/10">
+      <span id="toastText">Added to cart</span>
+    </div>
+  </div>
+
+  <div id="checkoutModal" class="fixed inset-0 z-[90] hidden items-center justify-center p-4" aria-hidden="true">
+    <div id="checkoutBackdrop" class="absolute inset-0 bg-pine/50 backdrop-blur-sm"></div>
+    <div class="relative z-10 max-w-md rounded-3xl bg-cream p-8 text-center shadow-2xl ring-1 ring-garden/15">
+      <div class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full border-2 border-garden/25 bg-white text-garden">
+        <svg class="h-7 w-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.75" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+      </div>
+      <h3 class="font-display text-2xl font-bold text-pine">Stripe coming soon</h3>
+      <p class="mt-3 text-sm leading-relaxed text-pine/85">
+        Our full checkout with Stripe is coming very soon. For now, please reach out to us directly to place your order. We can’t wait to share Grandma’s Garden with you!
+      </p>
+      <button type="button" id="checkoutClose" class="mt-6 w-full rounded-2xl bg-terracotta py-3 font-semibold text-white shadow-md transition hover:brightness-105">
+        Close
+      </button>
+    </div>
+  </div>
+
+  <div id="cartBackdrop" class="fixed inset-0 z-[60] hidden bg-pine/30 backdrop-blur-[2px] transition-opacity opacity-0"></div>
+  <aside id="cartDrawer" class="fixed inset-y-0 right-0 z-[65] flex w-full max-w-md translate-x-full flex-col bg-cream shadow-2xl transition-transform duration-300 ease-out" aria-label="Shopping cart">
+    <div class="flex items-center justify-between border-b border-garden/15 px-5 py-4">
+      <h2 class="font-display text-2xl font-bold text-pine">Your Cart</h2>
+      <button type="button" id="cartClose" class="rounded-full p-2 text-pine transition hover:bg-white" aria-label="Close cart">
+        <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div id="cartEmpty" class="hidden flex flex-1 flex-col items-center justify-center gap-4 px-8 text-center">
+      <div class="flex h-16 w-16 items-center justify-center rounded-full border-2 border-dashed border-garden/30 bg-white/80 text-garden/70" aria-hidden="true">
+        <svg class="h-8 w-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/></svg>
+      </div>
+      <p class="font-display text-xl text-pine">Your basket is resting in the shade</p>
+      <p class="text-sm text-pine/75">Add something sweet from the shop — Grandma’s saving a jar for you.</p>
+      <button type="button" id="continueShopping" class="rounded-2xl bg-garden px-6 py-3 text-sm font-semibold text-cream shadow-md transition hover:brightness-110">
+        Continue Shopping
+      </button>
+    </div>
+    <div id="cartListWrap" class="flex flex-1 flex-col overflow-hidden">
+      <div id="cartList" class="scrollbar-thin flex-1 overflow-y-auto px-4 py-3"></div>
+      <div class="border-t border-garden/15 bg-cream/95 p-5 backdrop-blur">
+        <div class="mb-4 flex items-center justify-between text-pine">
+          <span class="font-semibold">Subtotal</span>
+          <span id="cartSubtotal" class="font-display text-2xl text-terracotta">$0</span>
+        </div>
+        <button type="button" id="checkoutBtn" class="w-full rounded-2xl bg-gradient-to-r from-terracotta to-gold py-3.5 text-center text-base font-semibold text-white shadow-lg transition hover:brightness-105">
+          Checkout
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
+    <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
+      <a href="index.html" class="group flex shrink-0 items-center gap-3 rounded-2xl px-2 py-1 transition hover:opacity-90" aria-label="Grandma’s Garden home">
+        <div class="flex h-14 w-11 shrink-0 items-center justify-center rounded-xl border border-garden/20 bg-white/70 ring-1 ring-garden/10" aria-hidden="true"></div>
+        <span class="font-display text-lg font-semibold leading-tight text-pine sm:text-xl">Grandma’s Garden</span>
+      </a>
+      <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
+        <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
+        <a href="shop.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Shop</a>
+      </nav>
+      <div class="ml-auto flex items-center gap-2 md:ml-0">
+        <button type="button" id="menuBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-pine ring-1 ring-garden/15 transition hover:bg-white md:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
+          <svg id="menuIconOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg id="menuIconClose" class="hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+        </button>
+        <button type="button" id="cartBtn" class="relative inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white text-pine shadow-sm ring-1 ring-garden/15 transition hover:ring-garden/40" aria-label="Open cart">
+          <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l-1 12H6L5 9z"/></svg>
+          <span id="cartBadge" class="absolute -right-1 -top-1 flex h-5 min-w-[1.25rem] items-center justify-center rounded-full bg-terracotta px-1 text-[10px] font-bold text-white opacity-0 transition-opacity">0</span>
+        </button>
+      </div>
+    </div>
+    <div id="mobileMenu" class="hidden border-t border-garden/10 bg-cream px-4 py-4 md:hidden">
+      <div class="flex flex-col gap-3">
+        <a href="index.html" class="mobile-nav rounded-xl px-4 py-3 text-base font-semibold text-pine transition hover:bg-white">Home</a>
+        <a href="shop.html" class="mobile-nav rounded-xl px-4 py-3 text-base font-semibold text-pine transition hover:bg-white">Shop</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="relative border-t border-garden/10 bg-gradient-to-b from-cream to-white py-10 sm:py-14">
+    <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-35"></div>
+    <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+      <a href="shop.html" class="inline-flex items-center gap-2 rounded-2xl border border-garden/25 bg-white px-4 py-2.5 text-sm font-semibold text-garden shadow-sm transition hover:border-garden hover:bg-cream">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to Shop
+      </a>
+
+      <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
+        <div>
+          <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/70 shadow-inner ring-1 ring-garden/10">
+            <div id="pSlides" class="flex transition-transform duration-500 ease-out will-change-transform">
+              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
+                <div id="slide0Inner" class="mx-auto w-full max-w-lg"></div>
+              </div>
+              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
+                <div class="mx-auto flex aspect-square max-h-[min(420px,78vw)] w-full max-w-lg items-center justify-center rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">
+                  <p class="text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-center gap-4">
+            <button type="button" id="pPrev" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-pine shadow-md ring-1 ring-garden/15 transition hover:bg-gold/25" aria-label="Previous photo">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" id="pNext" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-pine shadow-md ring-1 ring-garden/15 transition hover:bg-gold/25" aria-label="Next photo">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">Elderberry Syrup</h1>
+          <p id="priceLine" class="mt-3 font-display text-3xl text-terracotta">$30</p>
+
+          <div class="mt-6">
+            <p class="mb-2 text-sm font-semibold uppercase tracking-wide text-garden/90">Size</p>
+            <div id="sizeGroup" class="inline-flex w-full max-w-md rounded-xl bg-white p-1 shadow-inner ring-1 ring-garden/15" role="group" aria-label="Choose size">
+              <button type="button" data-size="small" class="size-btn flex-1 rounded-lg py-3 text-sm font-semibold text-pine transition hover:bg-cream sm:text-base">Small · $15</button>
+              <button type="button" data-size="large" class="size-btn flex-1 rounded-lg py-3 text-sm font-semibold text-cream transition sm:text-base">Large · $30</button>
+            </div>
+          </div>
+
+          <p class="mt-6 text-base leading-relaxed text-pine/90 sm:text-lg">
+            Discover the powerful benefits of our Elderberry Syrup, a time-honored natural remedy lovingly crafted in Grandma’s Garden. Elderberry is celebrated for its ability to boost the immune system and help the body fight off colds, flu, and other upper respiratory infections. Packed with antioxidants, vitamins, and anti-inflammatory compounds, it can reduce the duration and severity of sickness symptoms, soothe sore throats, ease congestion, and support overall wellness — especially during cold and flu season. Perfect for the whole family! Ingredients: Spring Water, Organic Elderberries, Raw honey, Ceylon Cinnamon, Organic Ginger, Star Anise, Cloves.
+          </p>
+
+          <div class="mt-8 flex items-center justify-between gap-4 rounded-2xl bg-white p-4 ring-1 ring-garden/15">
+            <span class="text-sm font-semibold text-garden">Quantity</span>
+            <div class="flex items-center rounded-xl bg-cream p-1 shadow-sm ring-1 ring-garden/15">
+              <button type="button" id="qtyMinus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-white">−</button>
+              <span id="qtyValue" class="min-w-[2rem] text-center font-semibold text-pine">1</span>
+              <button type="button" id="qtyPlus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-white">+</button>
+            </div>
+          </div>
+          <button type="button" id="addBtn" class="mt-6 w-full rounded-2xl bg-gradient-to-r from-garden to-pine py-3.5 text-center text-base font-semibold text-cream shadow-lg shadow-garden/25 transition hover:brightness-110 active:scale-[0.99]">
+            Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="border-t border-garden/15 bg-pine text-cream">
+    <div class="mx-auto flex max-w-6xl flex-col items-center gap-2 px-4 py-10 text-center sm:flex-row sm:justify-between sm:text-left">
+      <p class="text-sm text-cream/90">© <span id="year"></span> Grandma’s Garden. All rights reserved.</p>
+      <p class="text-sm font-medium text-gold/90">Made with love on Long Island</p>
+    </div>
+  </footer>
+
+  <script src="cart.js"></script>
+  <script>
+    GrandmasGardenCart.init({ shopHref: "shop.html" });
+
+    (function () {
+      const PLACEHOLDER_SVG =
+        "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e8e4dc' width='800' height='800'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-size='28' fill='%234A7043'%3EMore Photos Coming Soon%3C/text%3E%3C/svg%3E";
+
+      const PHOTO_LARGE = "./listing photos/Elderberry-large.jpg";
+      const slide0Inner = document.getElementById("slide0Inner");
+      const priceLine = document.getElementById("priceLine");
+      const slides = document.getElementById("pSlides");
+      const gallery = document.getElementById("pGallery");
+
+      let sizeId = "large";
+      let slide = 0;
+      const total = 2;
+      let touchStartX = null;
+
+      function money(n) {
+        return "$" + n;
+      }
+
+      function renderSlide0() {
+        if (sizeId === "large") {
+          slide0Inner.innerHTML =
+            '<div class="zoom-wrap mx-auto max-h-[min(420px,78vw)] w-full bg-cream/50">' +
+            '<img src="' +
+            PHOTO_LARGE +
+            '" alt="Elderberry Syrup large bottle" class="mx-auto h-full max-h-[min(420px,78vw)] w-full object-contain" />' +
+            "</div>";
+        } else {
+          slide0Inner.innerHTML =
+            '<div class="ph-wrap mx-auto flex aspect-square max-h-[min(420px,78vw)] w-full max-w-lg cursor-default items-center justify-center overflow-hidden rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">' +
+            '<p class="ph-zoom text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>' +
+            "</div>";
+        }
+      }
+
+      function syncSizeButtons() {
+        document.querySelectorAll(".size-btn").forEach((btn) => {
+          const on = btn.getAttribute("data-size") === sizeId;
+          btn.className =
+            "size-btn flex-1 rounded-lg py-3 text-sm font-semibold transition sm:text-base " +
+            (on ? "bg-garden text-cream shadow" : "text-pine hover:bg-cream");
+        });
+        priceLine.textContent = sizeId === "large" ? money(30) : money(15);
+      }
+
+      function renderGallery() {
+        slides.style.transform = "translateX(-" + slide * 100 + "%)";
+      }
+
+      renderSlide0();
+      syncSizeButtons();
+
+      document.getElementById("sizeGroup").addEventListener("click", (e) => {
+        const btn = e.target.closest(".size-btn");
+        if (!btn) return;
+        sizeId = btn.getAttribute("data-size");
+        renderSlide0();
+        syncSizeButtons();
+      });
+
+      document.getElementById("pPrev").addEventListener("click", () => {
+        slide = Math.max(0, slide - 1);
+        renderGallery();
+      });
+      document.getElementById("pNext").addEventListener("click", () => {
+        slide = Math.min(total - 1, slide + 1);
+        renderGallery();
+      });
+
+      gallery.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true }
+      );
+      gallery.addEventListener(
+        "touchend",
+        (e) => {
+          if (touchStartX == null) return;
+          const dx = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(dx) > 40) {
+            if (dx < 0) slide = Math.min(total - 1, slide + 1);
+            else slide = Math.max(0, slide - 1);
+            renderGallery();
+          }
+          touchStartX = null;
+        },
+        { passive: true }
+      );
+
+      let qty = 1;
+      const qtyEl = document.getElementById("qtyValue");
+      document.getElementById("qtyMinus").addEventListener("click", () => {
+        qty = Math.max(1, qty - 1);
+        qtyEl.textContent = String(qty);
+      });
+      document.getElementById("qtyPlus").addEventListener("click", () => {
+        qty = Math.min(9, qty + 1);
+        qtyEl.textContent = String(qty);
+      });
+
+      document.getElementById("addBtn").addEventListener("click", () => {
+        const unitPrice = sizeId === "large" ? 30 : 15;
+        const image = sizeId === "large" ? PHOTO_LARGE : PLACEHOLDER_SVG;
+        const sizeLabel = sizeId === "large" ? "Large" : "Small";
+        GrandmasGardenCart.addOrMergeLine({
+          key: GrandmasGardenCart.cartLineKey("elderberry", sizeId),
+          productId: "elderberry",
+          title: "Elderberry Syrup",
+          sizeLabel,
+          unitPrice,
+          qty,
+          image,
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

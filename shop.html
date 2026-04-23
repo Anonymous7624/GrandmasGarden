@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grandma’s Garden — Long Island</title>
+  <title>Shop — Grandma’s Garden</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,20 +42,11 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
+    .card-img-zoom { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+    .group:hover .card-img-zoom { transform: scale(1.08); }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
-  <svg aria-hidden="true" class="absolute h-0 w-0 overflow-hidden" focusable="false">
-    <defs>
-      <pattern id="softPetals" width="96" height="96" patternUnits="userSpaceOnUse">
-        <circle cx="12" cy="20" r="3" fill="#D4AF77" fill-opacity="0.12" />
-        <circle cx="48" cy="8" r="2.5" fill="#C46A4E" fill-opacity="0.1" />
-        <circle cx="72" cy="44" r="2" fill="#166534" fill-opacity="0.08" />
-        <path d="M30 70 Q40 58 50 70 Q40 82 30 70" fill="#D4AF77" fill-opacity="0.1" />
-      </pattern>
-    </defs>
-  </svg>
-
   <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-500 ease-out" role="status" aria-live="polite">
     <div class="pointer-events-auto rounded-2xl border border-garden/20 bg-white px-5 py-3 text-sm font-medium text-pine shadow-xl shadow-garden/10">
       <span id="toastText">Added to cart</span>
@@ -118,8 +109,8 @@
       </a>
 
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
-        <a href="index.html" class="text-sm font-semibold text-garden">Home</a>
-        <a href="shop.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Shop</a>
+        <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
+        <a href="shop.html" class="text-sm font-semibold text-garden">Shop</a>
       </nav>
 
       <div class="ml-auto flex items-center gap-2 md:ml-0">
@@ -141,76 +132,71 @@
     </div>
   </header>
 
-  <main>
-    <section id="home" class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden scroll-mt-20">
-      <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-cream via-[#fff9ed] to-gold/25"></div>
-      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-80"></div>
-      <div class="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-garden/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute -left-16 bottom-10 h-64 w-64 rounded-full bg-terracotta/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute inset-0" style="background-image: url(#softPetals)"></div>
-
-      <div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 pb-28 pt-16 text-center sm:pb-32 sm:pt-20">
-        <p class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-garden shadow-sm ring-1 ring-garden/10">
-          Long Island · Small batch
-        </p>
-
-        <div class="mb-8 flex w-28 flex-col items-center justify-center rounded-2xl border border-garden/20 bg-white/60 py-6 shadow-inner ring-1 ring-garden/10 sm:w-32" aria-label="Logo placeholder">
-          <div class="h-24 w-16 rounded-lg border border-dashed border-garden/25 bg-cream/80 sm:h-28 sm:w-[4.5rem]"></div>
-        </div>
-
-        <h1 class="font-display text-4xl font-bold leading-tight text-pine sm:text-6xl md:text-7xl">
-          Grandma’s Garden
-        </h1>
-        <p class="mt-5 max-w-xl text-lg text-pine/85 sm:text-xl">
-          Fresh from the heart of Long Island, made with love
-        </p>
-        <div class="mt-10 flex w-full max-w-md flex-col items-stretch gap-4 sm:flex-row sm:justify-center">
-          <a href="shop.html" class="rounded-2xl bg-gradient-to-r from-garden to-pine px-10 py-4 text-center text-base font-semibold text-cream shadow-xl shadow-garden/30 transition hover:brightness-110 hover:shadow-2xl active:scale-[0.98]">
-            Shop Now
-          </a>
-          <a href="#about" class="rounded-2xl border-2 border-garden/30 bg-white/60 px-10 py-4 text-center text-base font-semibold text-garden backdrop-blur transition hover:border-garden hover:bg-white">
-            Meet Donna
-          </a>
-        </div>
+  <main class="relative min-h-[60vh] border-t border-garden/10 bg-gradient-to-b from-cream to-white py-12 sm:py-16">
+    <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-40"></div>
+    <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+      <div class="mb-10 text-center sm:text-left">
+        <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">From our garden</h1>
+        <p class="mx-auto mt-3 max-w-2xl text-pine/80 sm:mx-0">Handcrafted goodies straight from Long Island — each jar filled with sunshine and care.</p>
       </div>
 
-      <a href="#about" id="scrollHint" class="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-pine/60 transition hover:text-garden" aria-label="Scroll to our story">
-        <span class="text-xs font-medium uppercase tracking-widest">Our story</span>
-        <span class="flex h-10 w-6 items-start justify-center rounded-full border-2 border-current pt-1.5">
-          <span class="h-2 w-1 animate-bounce rounded-full bg-current"></span>
-        </span>
-      </a>
-    </section>
-
-    <section id="about" class="relative scroll-mt-24 overflow-hidden border-t border-garden/10 bg-gradient-to-b from-white to-cream py-16 sm:py-24">
-      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-30"></div>
-      <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
-        <h2 class="font-display text-4xl font-bold text-pine sm:text-5xl">About Us</h2>
-        <p class="mt-3 font-display text-xl italic text-garden/90">A note from Donna</p>
-        <div class="mt-10 space-y-6 text-base leading-relaxed text-pine/90 sm:text-lg">
-          <p>
-            This is me — the grandma behind Grandma’s Garden. My inspiration to start this business at 68 years old comes from my two grandsons, Louis and Joseph — my Louie and baby Joey, my supreme joy!
-          </p>
-          <p>
-            Being a little extra nuts these days certainly adds to the mix, but here we are. Growing and mixing it up in the kitchen on a far grander scale than I ever imagined. I’m teaching about soil and garlic, and sharing what I know. I’m no garden guru or master gardener, just a lady who’s been growing naturally and organically for 39 years in this house, and a million years before that!
-          </p>
-          <p>
-            I grow all sorts of things — herbs, flowers, garlic (lots and lots of garlic), elderberries, butternut squash, hot peppers from all over the world, and so much more. Oh yeah… and my cannabis too, grown naturally with love and sunshine on my patio. Beautiful salves come from healthy vibrant plants!
-          </p>
-          <p>
-            And of course, honey — gorgeous raw Long Island honey, plus lavender, cinnamon, and hot varieties from all those chilis I grow. I also make honey-based skin care with so many wonderful benefits.
-          </p>
-          <p class="font-display text-xl font-semibold text-garden">
-            Welcome aboard my crazy train! Keep an eye on me — it’s all about to get very real!
-          </p>
-        </div>
-        <div class="mt-12 text-center">
-          <a href="shop.html" class="inline-flex rounded-2xl bg-gradient-to-r from-garden to-pine px-8 py-3.5 text-sm font-semibold text-cream shadow-lg shadow-garden/20 transition hover:brightness-110">
-            Visit the shop
+      <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
+          <a href="long-island-raw-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
+              <img src="./listing photos/RawHoney.jpg" alt="Long Island Raw Honey" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <h2 class="font-display text-2xl font-bold text-pine">Long Island Raw Honey</h2>
+              <p class="mt-2 font-display text-2xl text-terracotta">$9</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Pure 8oz raw honey from our Long Island hives — golden, floral, unforgettable.</p>
+            </div>
           </a>
-        </div>
+          <div class="px-5 pb-5">
+            <a href="long-island-raw-honey.html" class="flex w-full items-center justify-center rounded-2xl border-2 border-garden/25 bg-white py-3 text-sm font-semibold text-garden transition hover:border-garden hover:bg-cream">
+              View Product
+            </a>
+          </div>
+        </article>
+
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
+          <div class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</div>
+          <a href="cinnamon-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
+              <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <h2 class="font-display text-2xl font-bold text-pine">Cinnamon Honey</h2>
+              <p class="mt-2 font-display text-2xl text-terracotta">$9</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Sweetness meets gentle spice — lovely on toast, fruit, yogurt, and oatmeal.</p>
+            </div>
+          </a>
+          <div class="px-5 pb-5">
+            <a href="cinnamon-honey.html" class="flex w-full items-center justify-center rounded-2xl border-2 border-garden/25 bg-white py-3 text-sm font-semibold text-garden transition hover:border-garden hover:bg-cream">
+              View Product
+            </a>
+          </div>
+        </article>
+
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
+          <a href="elderberry-syrup.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-48 overflow-hidden bg-cream sm:h-52">
+              <img src="./listing photos/Elderberry-large.jpg" alt="Elderberry Syrup" class="card-img-zoom h-full w-full object-cover object-center" width="640" height="480" />
+            </div>
+            <div class="flex flex-1 flex-col p-5">
+              <h2 class="font-display text-2xl font-bold text-pine">Elderberry Syrup</h2>
+              <p class="mt-2 font-display text-xl text-terracotta">Small <span class="text-pine/70">$15</span> · Large <span class="font-semibold text-terracotta">$30</span></p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">A comforting family favorite for wellness through the seasons.</p>
+            </div>
+          </a>
+          <div class="px-5 pb-5">
+            <a href="elderberry-syrup.html" class="flex w-full items-center justify-center rounded-2xl border-2 border-garden/25 bg-white py-3 text-sm font-semibold text-garden transition hover:border-garden hover:bg-cream">
+              View Product
+            </a>
+          </div>
+        </article>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer class="border-t border-garden/15 bg-pine text-cream">

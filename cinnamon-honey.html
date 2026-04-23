@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Grandma’s Garden — Long Island</title>
+  <title>Cinnamon Honey — Grandma’s Garden</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Great+Vibes&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet" />
@@ -42,20 +42,12 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
+    .zoom-wrap { overflow: hidden; border-radius: 1rem; }
+    .zoom-wrap img { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
+    .zoom-wrap:hover img { transform: scale(1.1); }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
-  <svg aria-hidden="true" class="absolute h-0 w-0 overflow-hidden" focusable="false">
-    <defs>
-      <pattern id="softPetals" width="96" height="96" patternUnits="userSpaceOnUse">
-        <circle cx="12" cy="20" r="3" fill="#D4AF77" fill-opacity="0.12" />
-        <circle cx="48" cy="8" r="2.5" fill="#C46A4E" fill-opacity="0.1" />
-        <circle cx="72" cy="44" r="2" fill="#166534" fill-opacity="0.08" />
-        <path d="M30 70 Q40 58 50 70 Q40 82 30 70" fill="#D4AF77" fill-opacity="0.1" />
-      </pattern>
-    </defs>
-  </svg>
-
   <div id="toast" class="pointer-events-none fixed bottom-6 left-1/2 z-[100] -translate-x-1/2 translate-y-24 opacity-0 transition-all duration-500 ease-out" role="status" aria-live="polite">
     <div class="pointer-events-auto rounded-2xl border border-garden/20 bg-white px-5 py-3 text-sm font-medium text-pine shadow-xl shadow-garden/10">
       <span id="toastText">Added to cart</span>
@@ -116,12 +108,10 @@
         <div class="flex h-14 w-11 shrink-0 items-center justify-center rounded-xl border border-garden/20 bg-white/70 ring-1 ring-garden/10" aria-hidden="true"></div>
         <span class="font-display text-lg font-semibold leading-tight text-pine sm:text-xl">Grandma’s Garden</span>
       </a>
-
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
-        <a href="index.html" class="text-sm font-semibold text-garden">Home</a>
+        <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
         <a href="shop.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Shop</a>
       </nav>
-
       <div class="ml-auto flex items-center gap-2 md:ml-0">
         <button type="button" id="menuBtn" class="inline-flex h-11 w-11 items-center justify-center rounded-xl text-pine ring-1 ring-garden/15 transition hover:bg-white md:hidden" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
           <svg id="menuIconOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-width="2" d="M4 7h16M4 12h16M4 17h16"/></svg>
@@ -141,76 +131,63 @@
     </div>
   </header>
 
-  <main>
-    <section id="home" class="relative flex min-h-[100dvh] flex-col justify-center overflow-hidden scroll-mt-20">
-      <div class="pointer-events-none absolute inset-0 bg-gradient-to-br from-cream via-[#fff9ed] to-gold/25"></div>
-      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-80"></div>
-      <div class="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-garden/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute -left-16 bottom-10 h-64 w-64 rounded-full bg-terracotta/10 blur-3xl"></div>
-      <div class="pointer-events-none absolute inset-0" style="background-image: url(#softPetals)"></div>
-
-      <div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center px-6 pb-28 pt-16 text-center sm:pb-32 sm:pt-20">
-        <p class="mb-6 inline-flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-garden shadow-sm ring-1 ring-garden/10">
-          Long Island · Small batch
-        </p>
-
-        <div class="mb-8 flex w-28 flex-col items-center justify-center rounded-2xl border border-garden/20 bg-white/60 py-6 shadow-inner ring-1 ring-garden/10 sm:w-32" aria-label="Logo placeholder">
-          <div class="h-24 w-16 rounded-lg border border-dashed border-garden/25 bg-cream/80 sm:h-28 sm:w-[4.5rem]"></div>
-        </div>
-
-        <h1 class="font-display text-4xl font-bold leading-tight text-pine sm:text-6xl md:text-7xl">
-          Grandma’s Garden
-        </h1>
-        <p class="mt-5 max-w-xl text-lg text-pine/85 sm:text-xl">
-          Fresh from the heart of Long Island, made with love
-        </p>
-        <div class="mt-10 flex w-full max-w-md flex-col items-stretch gap-4 sm:flex-row sm:justify-center">
-          <a href="shop.html" class="rounded-2xl bg-gradient-to-r from-garden to-pine px-10 py-4 text-center text-base font-semibold text-cream shadow-xl shadow-garden/30 transition hover:brightness-110 hover:shadow-2xl active:scale-[0.98]">
-            Shop Now
-          </a>
-          <a href="#about" class="rounded-2xl border-2 border-garden/30 bg-white/60 px-10 py-4 text-center text-base font-semibold text-garden backdrop-blur transition hover:border-garden hover:bg-white">
-            Meet Donna
-          </a>
-        </div>
-      </div>
-
-      <a href="#about" id="scrollHint" class="absolute bottom-8 left-1/2 z-10 flex -translate-x-1/2 flex-col items-center gap-1 text-pine/60 transition hover:text-garden" aria-label="Scroll to our story">
-        <span class="text-xs font-medium uppercase tracking-widest">Our story</span>
-        <span class="flex h-10 w-6 items-start justify-center rounded-full border-2 border-current pt-1.5">
-          <span class="h-2 w-1 animate-bounce rounded-full bg-current"></span>
-        </span>
+  <main class="relative border-t border-garden/10 bg-gradient-to-b from-cream to-white py-10 sm:py-14">
+    <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-35"></div>
+    <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
+      <a href="shop.html" class="inline-flex items-center gap-2 rounded-2xl border border-garden/25 bg-white px-4 py-2.5 text-sm font-semibold text-garden shadow-sm transition hover:border-garden hover:bg-cream">
+        <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+        Back to Shop
       </a>
-    </section>
 
-    <section id="about" class="relative scroll-mt-24 overflow-hidden border-t border-garden/10 bg-gradient-to-b from-white to-cream py-16 sm:py-24">
-      <div class="pointer-events-none absolute inset-0 bg-leaf-tile opacity-30"></div>
-      <div class="relative z-10 mx-auto max-w-3xl px-4 sm:px-6">
-        <h2 class="font-display text-4xl font-bold text-pine sm:text-5xl">About Us</h2>
-        <p class="mt-3 font-display text-xl italic text-garden/90">A note from Donna</p>
-        <div class="mt-10 space-y-6 text-base leading-relaxed text-pine/90 sm:text-lg">
-          <p>
-            This is me — the grandma behind Grandma’s Garden. My inspiration to start this business at 68 years old comes from my two grandsons, Louis and Joseph — my Louie and baby Joey, my supreme joy!
-          </p>
-          <p>
-            Being a little extra nuts these days certainly adds to the mix, but here we are. Growing and mixing it up in the kitchen on a far grander scale than I ever imagined. I’m teaching about soil and garlic, and sharing what I know. I’m no garden guru or master gardener, just a lady who’s been growing naturally and organically for 39 years in this house, and a million years before that!
-          </p>
-          <p>
-            I grow all sorts of things — herbs, flowers, garlic (lots and lots of garlic), elderberries, butternut squash, hot peppers from all over the world, and so much more. Oh yeah… and my cannabis too, grown naturally with love and sunshine on my patio. Beautiful salves come from healthy vibrant plants!
-          </p>
-          <p>
-            And of course, honey — gorgeous raw Long Island honey, plus lavender, cinnamon, and hot varieties from all those chilis I grow. I also make honey-based skin care with so many wonderful benefits.
-          </p>
-          <p class="font-display text-xl font-semibold text-garden">
-            Welcome aboard my crazy train! Keep an eye on me — it’s all about to get very real!
-          </p>
+      <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
+        <div>
+          <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/70 shadow-inner ring-1 ring-garden/10">
+            <div id="pSlides" class="flex transition-transform duration-500 ease-out will-change-transform">
+              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
+                <div class="relative">
+                  <span class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</span>
+                  <div class="zoom-wrap mx-auto max-h-[min(420px,78vw)] w-full max-w-lg bg-cream/50">
+                    <img src="./listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey bottle" class="mx-auto h-full max-h-[min(420px,78vw)] w-full object-contain" />
+                  </div>
+                </div>
+              </div>
+              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
+                <div class="mx-auto flex aspect-square max-h-[min(420px,78vw)] w-full max-w-lg items-center justify-center rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">
+                  <p class="text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-4 flex items-center justify-center gap-4">
+            <button type="button" id="pPrev" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-pine shadow-md ring-1 ring-garden/15 transition hover:bg-gold/25" aria-label="Previous photo">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            </button>
+            <button type="button" id="pNext" class="inline-flex h-11 w-11 items-center justify-center rounded-full bg-white text-pine shadow-md ring-1 ring-garden/15 transition hover:bg-gold/25" aria-label="Next photo">
+              <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+            </button>
+          </div>
         </div>
-        <div class="mt-12 text-center">
-          <a href="shop.html" class="inline-flex rounded-2xl bg-gradient-to-r from-garden to-pine px-8 py-3.5 text-sm font-semibold text-cream shadow-lg shadow-garden/20 transition hover:brightness-110">
-            Visit the shop
-          </a>
+
+        <div>
+          <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">Cinnamon Honey</h1>
+          <p class="mt-3 font-display text-3xl text-terracotta">$9</p>
+          <p class="mt-6 text-base leading-relaxed text-pine/90 sm:text-lg">
+            Our 8oz bottle of Cinnamon Honey is the perfect blend of sweetness and spice. It’s wonderful on toast, fresh fruit, yogurt, oatmeal, and so much more. A true customer favorite! Ingredients: Raw Honey, Ceylon Cinnamon and Love.
+          </p>
+          <div class="mt-8 flex items-center justify-between gap-4 rounded-2xl bg-white p-4 ring-1 ring-garden/15">
+            <span class="text-sm font-semibold text-garden">Quantity</span>
+            <div class="flex items-center rounded-xl bg-cream p-1 shadow-sm ring-1 ring-garden/15">
+              <button type="button" id="qtyMinus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-white">−</button>
+              <span id="qtyValue" class="min-w-[2rem] text-center font-semibold text-pine">1</span>
+              <button type="button" id="qtyPlus" class="h-10 w-10 rounded-lg text-lg font-semibold text-pine transition hover:bg-white">+</button>
+            </div>
+          </div>
+          <button type="button" id="addBtn" class="mt-6 w-full rounded-2xl bg-gradient-to-r from-garden to-pine py-3.5 text-center text-base font-semibold text-cream shadow-lg shadow-garden/25 transition hover:brightness-110 active:scale-[0.99]">
+            Add to Cart
+          </button>
         </div>
       </div>
-    </section>
+    </div>
   </main>
 
   <footer class="border-t border-garden/15 bg-pine text-cream">
@@ -223,6 +200,74 @@
   <script src="cart.js"></script>
   <script>
     GrandmasGardenCart.init({ shopHref: "shop.html" });
+
+    (function () {
+      const slides = document.getElementById("pSlides");
+      const gallery = document.getElementById("pGallery");
+      let slide = 0;
+      const total = 2;
+      let touchStartX = null;
+
+      function render() {
+        slides.style.transform = "translateX(-" + slide * 100 + "%)";
+      }
+
+      document.getElementById("pPrev").addEventListener("click", () => {
+        slide = Math.max(0, slide - 1);
+        render();
+      });
+      document.getElementById("pNext").addEventListener("click", () => {
+        slide = Math.min(total - 1, slide + 1);
+        render();
+      });
+
+      gallery.addEventListener(
+        "touchstart",
+        (e) => {
+          touchStartX = e.changedTouches[0].screenX;
+        },
+        { passive: true }
+      );
+      gallery.addEventListener(
+        "touchend",
+        (e) => {
+          if (touchStartX == null) return;
+          const dx = e.changedTouches[0].screenX - touchStartX;
+          if (Math.abs(dx) > 40) {
+            if (dx < 0) slide = Math.min(total - 1, slide + 1);
+            else slide = Math.max(0, slide - 1);
+            render();
+          }
+          touchStartX = null;
+        },
+        { passive: true }
+      );
+
+      let qty = 1;
+      const qtyEl = document.getElementById("qtyValue");
+      document.getElementById("qtyMinus").addEventListener("click", () => {
+        qty = Math.max(1, qty - 1);
+        qtyEl.textContent = String(qty);
+      });
+      document.getElementById("qtyPlus").addEventListener("click", () => {
+        qty = Math.min(9, qty + 1);
+        qtyEl.textContent = String(qty);
+      });
+
+      const MAIN_IMG = "./listing photos/CinnamonHoney.jpg";
+
+      document.getElementById("addBtn").addEventListener("click", () => {
+        GrandmasGardenCart.addOrMergeLine({
+          key: GrandmasGardenCart.cartLineKey("cinnamon-honey", null),
+          productId: "cinnamon-honey",
+          title: "Cinnamon Honey",
+          sizeLabel: null,
+          unitPrice: 9,
+          qty,
+          image: MAIN_IMG,
+        });
+      });
+    })();
   </script>
 </body>
 </html>
