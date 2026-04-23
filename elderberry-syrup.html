@@ -42,19 +42,22 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
-    .zoom-wrap {
+    .detail-zoom-viewport {
       overflow: hidden;
-      border-radius: 1rem;
+      border-radius: 0.75rem;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: none;
     }
-    .zoom-wrap img {
-      transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1);
-      transform-origin: center center;
+    .detail-zoom-img {
+      transform: scale(1);
+      transform-origin: 50% 50%;
+      will-change: transform;
+      transition: transform 0.22s ease-out;
     }
-    .zoom-wrap:hover img {
-      transform: scale(1.1);
+    .detail-zoom-viewport.is-zooming .detail-zoom-img {
+      transform: scale(2.25);
+      transition-duration: 0.06s;
     }
-    .ph-zoom { transition: transform 0.55s cubic-bezier(0.22, 1, 0.36, 1); }
-    .ph-wrap:hover .ph-zoom { transform: scale(1.04); }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
@@ -115,7 +118,7 @@
   <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
       <a href="index.html" class="group flex shrink-0 items-center rounded-2xl px-1 py-0.5 transition hover:opacity-90" aria-label="Grandma’s Garden home">
-        <img src="./listing photos/Logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-16 w-auto shrink-0 object-contain sm:h-20" decoding="async" />
+        <img src="./Listing photos/logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-20 w-auto shrink-0 object-contain" decoding="async" />
       </a>
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
         <a href="index.html" class="text-sm font-semibold text-pine/80 transition hover:text-garden">Home</a>
@@ -150,13 +153,13 @@
 
       <div class="mt-8 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-12">
         <div>
-          <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/70 shadow-inner ring-1 ring-garden/10">
+          <div id="pGallery" class="relative touch-pan-y overflow-hidden rounded-2xl bg-white/60 shadow-inner ring-1 ring-garden/10">
             <div id="pSlides" class="flex transition-transform duration-500 ease-out will-change-transform">
-              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
-                <div id="slide0Inner" class="mx-auto w-full max-w-lg"></div>
+              <div class="min-w-full shrink-0 p-1 sm:p-1.5">
+                <div id="slide0Inner" class="w-full"></div>
               </div>
-              <div class="min-w-full shrink-0 px-2 pb-2 pt-2 sm:px-3 sm:pb-3 sm:pt-3">
-                <div class="mx-auto flex h-[min(440px,82vmin)] w-full max-w-lg items-center justify-center rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">
+              <div class="min-w-full shrink-0 p-1 sm:p-1.5">
+                <div class="flex h-[min(460px,80vmin)] w-full items-center justify-center rounded-xl bg-[#e8e4dc] px-3 text-center ring-1 ring-garden/15">
                   <p class="text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>
                 </div>
               </div>
@@ -219,7 +222,7 @@
       const PLACEHOLDER_SVG =
         "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='800'%3E%3Crect fill='%23e8e4dc' width='800' height='800'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='system-ui,sans-serif' font-size='28' fill='%234A7043'%3EMore Photos Coming Soon%3C/text%3E%3C/svg%3E";
 
-      const PHOTO_LARGE = "./listing photos/Elderberry-large.jpg";
+      const PHOTO_LARGE = "./Listing photos/Elderberry-large.jpg";
       const slide0Inner = document.getElementById("slide0Inner");
       const priceLine = document.getElementById("priceLine");
       const slides = document.getElementById("pSlides");
@@ -234,20 +237,77 @@
         return "$" + n;
       }
 
+      function wireGrandmasGardenDetailZoom(container) {
+        var root = container || document;
+        root.querySelectorAll(".detail-zoom-viewport").forEach(function (vp) {
+          var img = vp.querySelector(".detail-zoom-img");
+          if (!img || img.dataset.ggDetailZoom) return;
+          img.dataset.ggDetailZoom = "1";
+          function originFromClient(cx, cy) {
+            var r = vp.getBoundingClientRect();
+            if (r.width < 1 || r.height < 1) return;
+            var x = ((cx - r.left) / r.width) * 100;
+            var y = ((cy - r.top) / r.height) * 100;
+            img.style.transformOrigin =
+              Math.max(0, Math.min(100, x)) + "% " + Math.max(0, Math.min(100, y)) + "%";
+          }
+          function endZoom() {
+            vp.classList.remove("is-zooming");
+            img.style.transformOrigin = "50% 50%";
+          }
+          vp.addEventListener("mouseenter", function (e) {
+            originFromClient(e.clientX, e.clientY);
+            vp.classList.add("is-zooming");
+          });
+          vp.addEventListener("mousemove", function (e) {
+            if (vp.classList.contains("is-zooming")) originFromClient(e.clientX, e.clientY);
+          });
+          vp.addEventListener("mouseleave", endZoom);
+          vp.addEventListener(
+            "touchstart",
+            function (e) {
+              if (!e.touches[0]) return;
+              originFromClient(e.touches[0].clientX, e.touches[0].clientY);
+              vp.classList.add("is-zooming");
+              e.stopPropagation();
+            },
+            { passive: true }
+          );
+          vp.addEventListener(
+            "touchmove",
+            function (e) {
+              if (!e.touches[0] || !vp.classList.contains("is-zooming")) return;
+              originFromClient(e.touches[0].clientX, e.touches[0].clientY);
+              e.stopPropagation();
+            },
+            { passive: true }
+          );
+          vp.addEventListener("touchend", function (e) {
+            endZoom();
+            e.stopPropagation();
+          });
+          vp.addEventListener("touchcancel", function (e) {
+            endZoom();
+            e.stopPropagation();
+          });
+        });
+      }
+
       function renderSlide0() {
         if (sizeId === "large") {
           slide0Inner.innerHTML =
-            '<div class="zoom-wrap mx-auto flex h-[min(440px,82vmin)] w-full max-w-lg items-center justify-center bg-cream/50 ring-1 ring-garden/10">' +
+            '<div class="detail-zoom-viewport relative h-[min(460px,80vmin)] w-full overflow-hidden rounded-xl bg-cream ring-1 ring-garden/15">' +
             '<img src="' +
             PHOTO_LARGE +
-            '" alt="Elderberry Syrup large bottle" class="max-h-full w-full object-contain object-center" />' +
+            '" alt="Elderberry Syrup large bottle" class="detail-zoom-img absolute inset-0 h-full w-full object-cover object-center select-none" width="800" height="800" draggable="false" decoding="async" />' +
             "</div>";
         } else {
           slide0Inner.innerHTML =
-            '<div class="ph-wrap mx-auto flex h-[min(440px,82vmin)] w-full max-w-lg cursor-default items-center justify-center overflow-hidden rounded-2xl bg-[#e8e4dc] p-6 text-center ring-1 ring-garden/10">' +
-            '<p class="ph-zoom text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>' +
+            '<div class="flex h-[min(460px,80vmin)] w-full items-center justify-center rounded-xl bg-[#e8e4dc] px-3 text-center ring-1 ring-garden/15">' +
+            '<p class="text-sm font-semibold uppercase tracking-wide text-garden/75">More Photos Coming Soon</p>' +
             "</div>";
         }
+        wireGrandmasGardenDetailZoom(slide0Inner);
       }
 
       function syncSizeButtons() {
