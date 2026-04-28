@@ -42,14 +42,7 @@
       background: rgba(74, 112, 67, 0.35);
       border-radius: 999px;
     }
-    .shop-card-zoom-img {
-      will-change: transform, transform-origin;
-      transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    }
-    .shop-card-zoom-viewport.is-zooming .shop-card-zoom-img {
-      transform: scale(1.15);
-      transition-duration: 0.14s;
-    }
+    .shop-card-link { touch-action: manipulation; }
   </style>
 </head>
 <body class="bg-cream font-sans text-pine antialiased">
@@ -110,7 +103,7 @@
   <header class="sticky top-0 z-50 border-b border-garden/10 bg-cream/90 backdrop-blur-md">
     <div class="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
       <a href="index.html" class="group flex shrink-0 items-center rounded-2xl px-1 py-0.5 transition hover:opacity-90" aria-label="Grandma’s Garden home">
-        <img src="./Listing photos/logo.jpg" alt="Grandma's Garden" width="120" height="160" class="h-20 w-auto shrink-0 object-contain" decoding="async" />
+        <img src="./Listing photos/logo.png" alt="Grandma's Garden" class="h-20 w-auto" />
       </a>
 
       <nav class="ml-auto hidden items-center gap-8 md:flex" aria-label="Main">
@@ -142,19 +135,19 @@
     <div class="relative z-10 mx-auto max-w-6xl px-4 sm:px-6">
       <div class="mb-10 text-center sm:text-left">
         <h1 class="font-display text-4xl font-bold text-pine sm:text-5xl">From our garden</h1>
-        <p class="mx-auto mt-3 max-w-2xl text-pine/80 sm:mx-0">Handcrafted goodies straight from Long Island, each jar filled with sunshine and care.</p>
+        <p class="mx-auto mt-3 max-w-2xl text-pine/80 sm:mx-0">Little batches from my Long Island kitchen — made the way I make things for family.</p>
       </div>
 
       <div class="grid grid-cols-1 gap-6 sm:grid-cols-2 xl:grid-cols-3">
-        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
-          <a href="long-island-raw-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="shop-card-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
-              <img src="./Listing photos/RawHoney.jpg" alt="Long Island Raw Honey" class="shop-card-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition-transform transition-shadow duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl active:scale-[1.02]">
+          <a href="long-island-raw-honey.html" class="shop-card-link block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./Listing photos/RawHoney.jpg" alt="Long Island Raw Honey" class="h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Long Island Raw Honey</h2>
               <p class="mt-2 font-display text-2xl text-terracotta">$9</p>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Pure eight ounce raw honey from Long Island hives, golden and floral. Everything is grown without harsh chemicals, most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives.</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">This is my classic Long Island raw honey — golden, floral, and so good by the spoonful. It comes in an 8 oz plastic bottle so it’s easy to drizzle on tea, toast, or yogurt without a sticky mess.</p>
             </div>
           </a>
           <div class="px-5 pb-5">
@@ -164,16 +157,16 @@
           </div>
         </article>
 
-        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition-transform transition-shadow duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl active:scale-[1.02]">
           <div class="pointer-events-none absolute left-3 top-3 z-10 rotate-[-6deg] rounded-md bg-gradient-to-r from-gold to-amber-200 px-3 py-1 text-xs font-extrabold uppercase tracking-wide text-pine shadow-lg ring-2 ring-white/80">Best Seller!</div>
-          <a href="cinnamon-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="shop-card-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
-              <img src="./Listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey" class="shop-card-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
+          <a href="cinnamon-honey.html" class="shop-card-link block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./Listing photos/CinnamonHoney.jpg" alt="Cinnamon Honey" class="h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Cinnamon Honey</h2>
               <p class="mt-2 font-display text-2xl text-terracotta">$9</p>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Sweetness meets gentle spice on toast, fruit, yogurt, and oatmeal. Everything is grown without harsh chemicals, most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives.</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">A cozy little swirl of cinnamon in raw honey — the one everyone asks for. It’s in an 8 oz plastic bottle, perfect for warm toast, apples, oatmeal, or a spoonful stirred into tea.</p>
             </div>
           </a>
           <div class="px-5 pb-5">
@@ -183,15 +176,15 @@
           </div>
         </article>
 
-        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
-          <a href="elderberry-syrup.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="shop-card-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
-              <img src="./Listing photos/Elderberry-large.jpg" alt="Elderberry Syrup" class="shop-card-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition-transform transition-shadow duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl active:scale-[1.02]">
+          <a href="elderberry-syrup.html" class="shop-card-link block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./Listing photos/Elderberry-large.jpg" alt="Elderberry Syrup" class="h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Elderberry Syrup</h2>
               <p class="mt-2 font-display text-xl text-terracotta">Small <span class="text-pine/70">$15</span> · Large <span class="font-semibold text-terracotta">$30</span></p>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">A comforting family favorite for wellness through the seasons, slow simmered with love. Everything is grown without harsh chemicals, most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives.</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">My slow-simmered elderberry syrup for the chilly months — gentle spices, raw honey, and lots of patience. It comes in a glass bottle (small or large), and we keep it in the fridge so it stays fresh and lovely.</p>
             </div>
           </a>
           <div class="px-5 pb-5">
@@ -201,15 +194,15 @@
           </div>
         </article>
 
-        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
-          <a href="little-jar-of-sunshine.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="shop-card-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
-              <img src="./Listing photos/LittleJarOfSunshine.jpg" alt="Little Jar of Sunshine" class="shop-card-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition-transform transition-shadow duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl active:scale-[1.02]">
+          <a href="little-jar-of-sunshine.html" class="shop-card-link block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./Listing photos/LittleJarOfSunshine.jpg" alt="Little Jar of Sunshine" class="h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Little Jar of Sunshine</h2>
               <p class="mt-2 font-display text-2xl text-terracotta">$20</p>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">A four ounce jar of fermented garlic, ginger, lemon, and raw honey for cozy immune support. Everything is grown without harsh chemicals, most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives.</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">A little “feel good” blend I keep on hand — fermented garlic and ginger with lemon and raw honey. It comes in a cute small glass jar (4 oz), and a tiny spoonful goes a long way.</p>
             </div>
           </a>
           <div class="px-5 pb-5">
@@ -219,15 +212,15 @@
           </div>
         </article>
 
-        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition hover:-translate-y-0.5 hover:shadow-xl">
-          <a href="raw-hot-honey.html" class="block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
-            <div class="shop-card-zoom-viewport relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
-              <img src="./Listing photos/HotHoney.jpg" alt="Raw Hot Honey" class="shop-card-zoom-img h-full w-full object-cover object-center" width="640" height="480" />
+        <article class="group relative flex flex-col overflow-hidden rounded-3xl bg-white shadow-lg ring-1 ring-garden/10 transition-transform transition-shadow duration-200 ease-out hover:-translate-y-0.5 hover:scale-[1.05] hover:shadow-xl active:scale-[1.02]">
+          <a href="raw-hot-honey.html" class="shop-card-link block focus:outline-none focus-visible:ring-2 focus-visible:ring-garden">
+            <div class="relative h-[19rem] overflow-hidden bg-cream sm:h-[22rem] lg:h-[26rem]">
+              <img src="./Listing photos/HotHoney.jpg" alt="Raw Hot Honey" class="h-full w-full object-cover object-center" width="640" height="480" />
             </div>
             <div class="flex flex-1 flex-col p-5">
               <h2 class="font-display text-2xl font-bold text-pine">Raw Hot Honey</h2>
               <p class="mt-2 font-display text-2xl text-terracotta">$9</p>
-              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Sweet heat for chicken, pizza, roasted vegetables, cheese boards, and marinades. Everything is grown without harsh chemicals, most ingredients come straight from Donna’s garden, and the honey is locally sourced from Long Island hives.</p>
+              <p class="mt-3 flex-1 text-sm leading-relaxed text-pine/80">Sweet first, then a gentle little kick — drizzle it on pizza, chicken, roasted veggies, or even cornbread. It’s in an 8 oz plastic bottle, so you can pour a little (or a lot) without fuss.</p>
             </div>
           </a>
           <div class="px-5 pb-5">
@@ -242,7 +235,7 @@
 
   <footer class="border-t border-garden/15 bg-pine text-cream">
     <div class="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-10 sm:px-6">
-      <a href="https://www.facebook.com/" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-cream shadow-sm ring-1 ring-white/15 transition hover:bg-white/20">
+      <a href="https://www.facebook.com/profile.php?id=61583783216471" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-3 rounded-2xl border border-white/20 bg-white/10 px-5 py-3 text-sm font-semibold text-cream shadow-sm ring-1 ring-white/15 transition hover:bg-white/20">
         <span class="flex h-9 w-9 items-center justify-center rounded-full bg-[#1877F2] text-white" aria-hidden="true">
           <svg class="h-5 w-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
         </span>
@@ -258,29 +251,6 @@
   <script src="cart.js"></script>
   <script>
     GrandmasGardenCart.init({ shopHref: "shop.html" });
-
-    (function () {
-      document.querySelectorAll(".shop-card-zoom-viewport").forEach(function (vp) {
-        var img = vp.querySelector(".shop-card-zoom-img");
-        if (!img) return;
-        function setOrigin(e) {
-          var r = vp.getBoundingClientRect();
-          if (r.width < 1 || r.height < 1) return;
-          var x = ((e.clientX - r.left) / r.width) * 100;
-          var y = ((e.clientY - r.top) / r.height) * 100;
-          img.style.transformOrigin = Math.max(0, Math.min(100, x)) + "% " + Math.max(0, Math.min(100, y)) + "%";
-        }
-        vp.addEventListener("mouseenter", function (e) {
-          setOrigin(e);
-          vp.classList.add("is-zooming");
-        });
-        vp.addEventListener("mousemove", setOrigin);
-        vp.addEventListener("mouseleave", function () {
-          vp.classList.remove("is-zooming");
-          img.style.transformOrigin = "50% 50%";
-        });
-      });
-    })();
   </script>
 </body>
 </html>

@@ -32,7 +32,7 @@
       '  <div class="gg-lb-scroll mx-auto flex min-h-0 w-full flex-1 snap-x snap-mandatory overflow-x-auto overflow-y-hidden" style="-webkit-overflow-scrolling:touch">' +
       '    <div class="gg-lb-slide flex min-h-0 min-w-full shrink-0 snap-center items-center justify-center px-2 pb-4 sm:px-4">' +
       '      <div class="gg-lb-zoom-shell relative flex h-[min(78vh,720px)] w-full max-w-[min(96vw,920px)] flex-col items-stretch justify-center">' +
-      '        <div class="gg-lb-zoom-outer relative flex-1 overflow-hidden rounded-xl bg-black/25 ring-1 ring-white/25" style="touch-action:pan-x">' +
+      '        <div class="gg-lb-zoom-outer relative flex-1 overflow-hidden rounded-xl bg-black/25 ring-1 ring-white/25" style="touch-action:pan-x pinch-zoom">' +
       '          <img class="gg-lb-img pointer-events-none absolute left-1/2 top-1/2 h-full w-full max-h-full max-w-full object-contain select-none" alt="" draggable="false" decoding="async" />' +
       "        </div>" +
       '        <div class="mt-3 hidden items-center justify-center gap-2 md:flex">' +
@@ -68,7 +68,7 @@
     if (!imgEl) return;
     imgEl.style.transform = "translate(calc(-50% + " + tx + "px), calc(-50% + " + ty + "px)) scale(" + scale + ")";
     const outer = document.querySelector("#ggPhotoLightbox .gg-lb-zoom-outer");
-    if (outer) outer.style.touchAction = scale > 1.02 ? "none" : "pan-x";
+    if (outer) outer.style.touchAction = scale > 1.02 ? "none" : "pan-x pinch-zoom";
   }
 
   function resetZoom() {
